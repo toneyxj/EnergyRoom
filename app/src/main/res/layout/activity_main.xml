@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical"
+    android:padding="@dimen/main_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="161"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="303"
+            android:background="@drawable/background_tray_side_black">
+
+            <include
+                layout="@layout/include_system_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            android:layout_weight="165"
+            android:orientation="vertical">
+
+            <com.moxi.energyroom.view.widget.HotAndHumidityView
+                android:id="@+id/cur_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_tray_side_black"
+                app:describe="当前温度"
+                app:item_logo="@mipmap/ic_launcher"
+                app:show_value="0°C" />
+
+            <com.moxi.energyroom.view.widget.HotAndHumidityView
+                android:id="@+id/cur_humidity"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/main_item_margin"
+                android:layout_weight="1"
+                android:background="@drawable/background_tray_side_black"
+                app:describe="当前湿度"
+                app:item_logo="@mipmap/ic_launcher"
+                app:show_value="76%" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/main_item_margin"
+        android:layout_weight="215"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="303"
+            android:background="@drawable/background_tray_side_black"
+            android:orientation="vertical"
+            android:padding="@dimen/main_item_margin">
+
+            <TextView
+                style="@style/main_general_txt_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/white_btn"
+                android:drawablePadding="@dimen/txt_margin"
+                android:gravity="center_vertical"
+                android:text="热量设定" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.moxi.energyroom.view.widget.otherView.HotSettingView
+                    android:id="@+id/heat_liang_ce"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    app:middle_txt="两侧"
+                    app:select="true"
+                    app:select_grade="1"
+                    app:top_img="@mipmap/heat_liangce" />
+
+                <com.moxi.energyroom.view.widget.otherView.HotSettingView
+                    android:id="@+id/heat_beihou"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    app:middle_txt="后背"
+                    app:select="true"
+                    app:select_grade="1"
+                    app:top_img="@mipmap/heat_houbei" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            android:layout_weight="165"
+            android:background="@drawable/background_tray_side_black"
+            android:orientation="vertical"
+            android:padding="@dimen/main_item_margin">
+
+            <TextView
+                style="@style/main_general_txt_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/white_btn"
+                android:drawablePadding="@dimen/txt_margin"
+                android:gravity="center_vertical"
+                android:text="时间设定" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/main_item_margin"
+                android:layout_weight="1"
+                android:background="@drawable/arc_main_color">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+                <com.moxi.energyroom.view.widget.BaseView.XJTextView
+                    android:id="@+id/residue_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </RelativeLayout>
+
+            <com.moxi.energyroom.view.widget.BaseView.XJTextView
+                style="@style/main_general_txt_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/txt_margin"
+                android:text="剩余时间" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/main_margin"
+                android:layout_marginTop="@dimen/main_item_margin"
+                android:layout_marginRight="@dimen/main_margin"
+                android:orientation="horizontal">
+
+                <com.moxi.energyroom.view.widget.otherView.ArcAlphaButton
+                    android:id="@+id/setting_time_one"
+                    style="@style/time_setting"
+                    android:layout_marginRight="@dimen/main_item_margin"
+                    android:background="@drawable/arc_main_color"
+                    android:text="30\nmin" />
+
+                <com.moxi.energyroom.view.widget.otherView.ArcAlphaButton
+                    android:id="@+id/setting_time_two"
+                    style="@style/time_setting"
+                    android:layout_marginLeft="@dimen/main_item_margin"
+                    android:layout_marginRight="@dimen/main_item_margin"
+                    android:background="@drawable/arc_main_color"
+                    android:text="60\nmin" />
+
+                <com.moxi.energyroom.view.widget.otherView.ArcAlphaButton
+                    android:id="@+id/setting_time_three"
+                    style="@style/time_setting"
+                    android:layout_marginLeft="@dimen/main_item_margin"
+                    android:background="@drawable/arc_main_color"
+                    android:text="90\nmin" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/main_item_margin"
+        android:layout_weight="117">
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/zmd"
+            style="@style/main_bottom_txt_style"
+            app:grade_text="照明灯"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/ydd"
+            style="@style/main_bottom_txt_style"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            app:grade_text="阅读灯"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/jsd"
+            style="@style/main_bottom_txt_style"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            app:grade_text="加湿灯"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/main_item_margin"
+        android:layout_weight="117">
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/hqs"
+            style="@style/main_bottom_txt_style"
+            app:grade_text="换气扇"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/yb"
+            style="@style/main_bottom_txt_style"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            app:grade_text="氧吧"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+
+        <com.moxi.energyroom.view.widget.GradeSettingView
+            android:id="@+id/lyyx"
+            style="@style/main_bottom_txt_style"
+            android:layout_marginLeft="@dimen/main_item_margin"
+            app:grade_text="蓝牙音箱"
+            app:image_default="@mipmap/ic_launcher"
+            app:image_focus="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+
+</LinearLayout>

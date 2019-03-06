@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="hotandhumidity">
+        <attr name="item_logo" format="reference"/>
+        <attr name="show_value" format="string"/>
+        <attr name="describe" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="grade_setting">
+        <attr name="image_focus" format="reference"/>
+        <attr name="image_default" format="reference"/>
+        <attr name="txt_focus" format="color"/>
+        <attr name="txt_default" format="color"/>
+        <attr name="grade_text" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="select_button">
+        <attr name="is_select" format="reference"/>
+        <attr name="no_select" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="hot_setting">
+        <attr name="top_img" format="reference"/>
+        <attr name="middle_txt" format="string"/>
+        <attr name="select" format="boolean"/>
+        <attr name="select_grade" format="integer"/>
+    </declare-styleable>
+</resources>
