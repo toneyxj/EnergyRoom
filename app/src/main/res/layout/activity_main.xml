@@ -145,32 +145,16 @@
                     android:layout_centerInParent="true"
                     android:background="@mipmap/time_set" />
 
-                <LinearLayout
+                <com.moxi.energyroom.view.widget.BaseView.XJTextView
+                    android:id="@+id/residue_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:orientation="vertical">
-
-                    <com.moxi.energyroom.view.widget.BaseView.XJTextView
-                        android:id="@+id/residue_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:includeFontPadding="false"
-                        android:lineSpacingMultiplier="0.83"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="40sp" />
-                    <com.moxi.energyroom.view.widget.BaseView.XJTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/residue_time"
-                        android:layout_gravity="center_horizontal"
-                        android:lineSpacingMultiplier="0.9"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/white"
-                        android:text="min"
-                        android:textSize="@dimen/sp16" />
-                </LinearLayout>
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:lineSpacingMultiplier="0.83"
+                    android:textColor="@color/white"
+                    android:textSize="45sp" />
             </RelativeLayout>
 
             <com.moxi.energyroom.view.widget.BaseView.XJTextView

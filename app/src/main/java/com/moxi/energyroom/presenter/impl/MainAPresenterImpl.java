@@ -94,11 +94,11 @@ public class MainAPresenterImpl implements IMainAPresenter {
 
     @Override
     public void curRemainTime(long time) {
-//        String value = time + "\nmin";
-        Spannable WordtoSpan = new SpannableString(String.valueOf(time));
-//        int start = value.indexOf("min");
-//        int end = start + 3;
-//        WordtoSpan.setSpan(new AbsoluteSizeSpan(DensityUtil.dip2px(mIMainAView.getcontext(), 15)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String value = time + "\nmin";
+        Spannable WordtoSpan = new SpannableString(value);
+        int start = value.indexOf("min");
+        int end = start + 3;
+        WordtoSpan.setSpan(new AbsoluteSizeSpan(DensityUtil.dip2px(mIMainAView.getcontext(), 18)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         mIMainAView.residueTime(WordtoSpan);
 }
 
