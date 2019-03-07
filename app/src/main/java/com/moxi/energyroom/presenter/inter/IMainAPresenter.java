@@ -11,12 +11,16 @@ public interface IMainAPresenter {
     void curSystemTime(String hours,String amOrPm,String data,String sw);
 
     /**
-     * 温度与湿度设置
-     * @param temp 温度
-     * @param hum 湿度
+     * 当前温度
+     * @param value
      */
-    void curTemperatureOrHumidity(String temp,String hum);
+    void curTemperature(String value);
 
+    /**
+     * 当前湿度
+     * @param value
+     */
+    void curHumidity(String value);
     /**
      * 热量设置传输json
      * @param json

@@ -48,7 +48,7 @@ public class SystemTimeModelImpl implements ISystemTimeModel {
     private void initData() {
         long time = System.currentTimeMillis();
         Date date = new Date(time);
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy年MM月dd日");
         String data=fmt.format(date);
         Calendar calendar=Calendar.getInstance();
 

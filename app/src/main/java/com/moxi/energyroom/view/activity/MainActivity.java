@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     @Override
     public void residueTime(Spannable time) {
-
+        residue_time.setText(time);
     }
 
     @Override

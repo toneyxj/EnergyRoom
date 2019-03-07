@@ -5,6 +5,8 @@
 
     <ImageView
         android:id="@+id/item_logo"
+        android:layout_marginTop="@dimen/line_1dp"
+        android:layout_marginLeft="@dimen/line_1dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

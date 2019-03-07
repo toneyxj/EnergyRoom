@@ -16,6 +16,7 @@ import com.moxi.energyroom.model.inter.main.ISystemTimeModel;
 import com.moxi.energyroom.model.inter.main.ITemperatureAndHumidityModel;
 import com.moxi.energyroom.model.inter.main.ITimeSettingModel;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.DensityUtil;
 import com.moxi.energyroom.view.inter.IMainAView;
 
@@ -30,21 +31,30 @@ public class MainAPresenterImpl implements IMainAPresenter {
     public MainAPresenterImpl(@NonNull IMainAView aIMainAView) {
         mIMainAView = aIMainAView;
         //初始化model
-        systemTimeModel=new SystemTimeModelImpl(aIMainAView.getcontext(),this);
-        temperatureAndHumidityModel=new TemperatureAndHumidityModelImp(this);
-        hotSettingModel=new HotSettingModelImp(this);
-        timeSettingModel=new TimeSettingModelimp(this);
-        mainOtherSettingModel=new MainOtherSettingModelImp(mIMainAView.getcontext(),this);
+        systemTimeModel = new SystemTimeModelImpl(aIMainAView.getcontext(), this);
+        temperatureAndHumidityModel = new TemperatureAndHumidityModelImp(this);
+        hotSettingModel = new HotSettingModelImp(this);
+        timeSettingModel = new TimeSettingModelimp(this);
+        mainOtherSettingModel = new MainOtherSettingModelImp(mIMainAView.getcontext(), this);
     }
 
     @Override
     public void curSystemTime(String hours, String amOrPm, String data, String sw) {
-        mIMainAView.curSystemTime(hours,amOrPm,data,sw);
+        mIMainAView.curSystemTime(hours, amOrPm, data, sw);
     }
 
     @Override
-    public void curTemperatureOrHumidity(String temp, String hum) {
+    public void curTemperature(String value) {
+        if (null != temperatureAndHumidityModel)
+            temperatureAndHumidityModel.curTemperature(value);
+        mIMainAView.curTemperature(value + "°C");
+    }
 
+    @Override
+    public void curHumidity(String value) {
+        if (null != temperatureAndHumidityModel)
+            temperatureAndHumidityModel.curHumidity(value);
+        mIMainAView.curHumidity(value + "%");
     }
 
     @Override
@@ -74,9 +84,9 @@ public class MainAPresenterImpl implements IMainAPresenter {
 
     @Override
     public void settingTimeGrade(int grade) {
-        int setingTime=(grade+1)*30*60;
-        int curT=timeSettingModel.getSettingTime();
-        if (curT==setingTime)return;
+        int setingTime = (grade + 1) * 30 * 60;
+        int curT = timeSettingModel.getSettingTime();
+        if (curT == setingTime) return;
 
         timeSettingModel.settingTime(setingTime);
         mIMainAView.settingTimeIndex(grade);
@@ -84,13 +94,13 @@ public class MainAPresenterImpl implements IMainAPresenter {
 
     @Override
     public void curRemainTime(long time) {
-        String value=time+"\nmin";
-        Spannable WordtoSpan = new SpannableString(value);
-        int start=value.indexOf("min");
-        int end=start+3;
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(DensityUtil.dip2px(mIMainAView.getcontext(),20)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        String value = time + "\nmin";
+        Spannable WordtoSpan = new SpannableString(String.valueOf(time));
+//        int start = value.indexOf("min");
+//        int end = start + 3;
+//        WordtoSpan.setSpan(new AbsoluteSizeSpan(DensityUtil.dip2px(mIMainAView.getcontext(), 15)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         mIMainAView.residueTime(WordtoSpan);
-    }
+}
 
     @Override
     public void timeOut() {

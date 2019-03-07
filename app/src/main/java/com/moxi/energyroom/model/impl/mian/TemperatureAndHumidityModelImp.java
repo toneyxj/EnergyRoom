@@ -35,9 +35,8 @@ public class TemperatureAndHumidityModelImp implements ITemperatureAndHumidityMo
 
     @Override
     public void initTH() {
-    if (null==temp){
-
-    }
+        presenter.curTemperature(null==temp?"0":temp);
+        presenter.curHumidity(null==humidity?"0":humidity);
     }
 
     @Override
