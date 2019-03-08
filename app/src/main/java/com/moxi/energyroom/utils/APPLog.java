@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by Administrator on 2016/4/21.
  */
 public class APPLog {
-    private static boolean isOpen=true;
+    public static boolean isOpen=true;
     /**
      * 添加系统日志
      * @param hitn
