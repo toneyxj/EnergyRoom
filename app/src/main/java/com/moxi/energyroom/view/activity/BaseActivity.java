@@ -8,6 +8,7 @@ import android.view.View;
 import com.moxi.energyroom.listener.HandlerMessageInterface;
 import com.moxi.energyroom.listener.XJOnClickListener;
 import com.moxi.energyroom.otherPresenter.BaseUtils;
+import com.moxi.energyroom.utils.ActivityManagerUtils;
 
 import butterknife.ButterKnife;
 
@@ -20,11 +21,13 @@ public  abstract class BaseActivity extends Activity implements HandlerMessageIn
         viewAbout();
         setContentView(getContentLayout());
         ButterKnife.bind(this);
+        ActivityManagerUtils.getInstance().addActivity(this);
     }
   abstract int getContentLayout();
     abstract void viewAbout();
     @Override
     protected void onDestroy() {
+        ActivityManagerUtils.getInstance().finishActivity(this);
         super.onDestroy();
         hander.removeCallbacksAndMessages(null);
     }

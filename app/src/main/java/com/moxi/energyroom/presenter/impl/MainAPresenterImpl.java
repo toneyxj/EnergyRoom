@@ -5,6 +5,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 
+import com.moxi.energyroom.Been.transmitData.BaseData;
+import com.moxi.energyroom.listener.NettyMessageCallback;
 import com.moxi.energyroom.model.impl.mian.HotSettingModelImp;
 import com.moxi.energyroom.model.impl.mian.MainOtherSettingModelImp;
 import com.moxi.energyroom.model.impl.mian.SystemTimeModelImpl;
@@ -15,18 +17,22 @@ import com.moxi.energyroom.model.inter.main.IMainOtherSettingModel;
 import com.moxi.energyroom.model.inter.main.ISystemTimeModel;
 import com.moxi.energyroom.model.inter.main.ITemperatureAndHumidityModel;
 import com.moxi.energyroom.model.inter.main.ITimeSettingModel;
+import com.moxi.energyroom.netty.NettyClient;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.DensityUtil;
 import com.moxi.energyroom.view.inter.IMainAView;
 
-public class MainAPresenterImpl implements IMainAPresenter {
+import io.netty.channel.ChannelException;
+
+public class MainAPresenterImpl implements IMainAPresenter ,NettyMessageCallback {
     private IMainAView mIMainAView;
     private ISystemTimeModel systemTimeModel;
     private ITemperatureAndHumidityModel temperatureAndHumidityModel;
     private IHotSettingModel hotSettingModel;
     private ITimeSettingModel timeSettingModel;
     private IMainOtherSettingModel mainOtherSettingModel;
+
 
     public MainAPresenterImpl(@NonNull IMainAView aIMainAView) {
         mIMainAView = aIMainAView;
@@ -36,6 +42,9 @@ public class MainAPresenterImpl implements IMainAPresenter {
         hotSettingModel = new HotSettingModelImp(this);
         timeSettingModel = new TimeSettingModelimp(this);
         mainOtherSettingModel = new MainOtherSettingModelImp(mIMainAView.getcontext(), this);
+        //启动netty连接
+        NettyClient.getInstance().reSetingCallBack(this);
+        NettyClient.getInstance().startNetty();
     }
 
     @Override
@@ -114,6 +123,8 @@ public class MainAPresenterImpl implements IMainAPresenter {
         hotSettingModel.onDestory();
         timeSettingModel.onDestory();
         mainOtherSettingModel.onDestory();
+        //取消关联
+        NettyClient.getInstance().reSetingCallBack(null);
     }
 
     @Override
@@ -144,5 +155,22 @@ public class MainAPresenterImpl implements IMainAPresenter {
     @Override
     public void bottomLYYX(boolean is) {
         mIMainAView.bottomLYYX(is);
+    }
+
+    @Override
+    public void backMessage(BaseData data) {
+
+    }
+
+    @Override
+    public void TCPConnectFail(Exception e) {
+        if (e instanceof ChannelException){
+            //无法与设置IP建立连接！！！
+        }
+    }
+
+    @Override
+    public void TCPConnectSucess() {
+
     }
 }

@@ -8,16 +8,21 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.moxi.energyroom.Been.transmitData.BaseData;
 import com.moxi.energyroom.R;
 import com.moxi.energyroom.listener.HeatCallback;
 import com.moxi.energyroom.presenter.impl.MainAPresenterImpl;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.view.inter.IMainAView;
 import com.moxi.energyroom.view.widget.BaseView.XJTextView;
 import com.moxi.energyroom.view.widget.GradeSettingView;
 import com.moxi.energyroom.view.widget.HotAndHumidityView;
 import com.moxi.energyroom.view.widget.otherView.ArcAlphaButton;
 import com.moxi.energyroom.view.widget.otherView.HotSettingView;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -91,6 +96,7 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
         hqs.setOnClickListener(clickListener);
         yb.setOnClickListener(clickListener);
         lyyx.setOnClickListener(clickListener);
+
     }
 
     @Override
@@ -117,21 +123,21 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     @Override
     void clickView(View view) {
-        if (view instanceof ArcAlphaButton){
+        if (view instanceof ArcAlphaButton) {
             try {
-                Object tag=view.getTag();
-                if (null!=tag){
-                    int index= (int) tag;
+                Object tag = view.getTag();
+                if (null != tag) {
+                    int index = (int) tag;
                     mIMainAPresenter.settingTimeGrade(index);
                     return;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
 
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.zmd:
                 mIMainAPresenter.bottomZMD(!zmd.isSelect());
                 break;
@@ -150,8 +156,8 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
             case R.id.lyyx:
                 mIMainAPresenter.bottomLYYX(!lyyx.isSelect());
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
@@ -199,7 +205,7 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
         setting_time_one.setSelect(false);
         setting_time_two.setSelect(false);
         setting_time_three.setSelect(false);
-            if (index<0)return;
+        if (index < 0) return;
         switch (index) {
             case 1:
                 setting_time_two.setSelect(true);
