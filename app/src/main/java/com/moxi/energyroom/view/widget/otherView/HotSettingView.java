@@ -91,6 +91,7 @@ public class HotSettingView extends LinearLayout {
     private XJOnClickListener clickListener=new XJOnClickListener() {
         @Override
         public void onclickView(View view) {
+            if (!isSwitch())return;
             if (view instanceof SelectButton){
                 try {
                     int curGrade= (int) view.getTag();
@@ -127,6 +128,7 @@ public class HotSettingView extends LinearLayout {
     }
 
     public void setSwitch(boolean aSwitch) {
+        if (isSwitch==aSwitch)return;
         isSwitch = aSwitch;
         initSwich();
     }
@@ -136,6 +138,7 @@ public class HotSettingView extends LinearLayout {
     }
 
     public void setGrade(int grade) {
+        if (this.grade==grade)return;
         this.grade = grade;
         initGrade();
     }

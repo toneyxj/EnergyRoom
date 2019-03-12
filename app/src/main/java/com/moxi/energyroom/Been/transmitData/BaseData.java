@@ -96,18 +96,19 @@ public abstract class BaseData {
         BaseData data = null;
         int opcode = JsonUtils.getJsonInt(jsonObject, "opcode");
         int state = JsonUtils.getJsonInt(jsonObject, "state");
-        int value = JsonUtils.getJsonInt(jsonObject, "value");
+        int value = 0;
         switch (id) {
             case EV_Type.EV_SENSOR:
-                int hum = JsonUtils.getJsonInt(jsonObject, "hum");
-                int tem = JsonUtils.getJsonInt(jsonObject, "tem");
+                double hum = JsonUtils.getJsonDouble(jsonObject, "hum");
+                double tem = JsonUtils.getJsonDouble(jsonObject, "tem");
                 data = new TemperatureHumidity(id)
-                        .setHum(hum)
-                        .setTem(tem)
+                        .setHum((float) hum)
+                        .setTem((float) tem)
                         .setOpcode(opcode)
                         .setState(state);
                 break;
             case EV_Type.EV_HEATFILM:
+                value = JsonUtils.getJsonInt(jsonObject, "value");
                 int zone = JsonUtils.getJsonInt(jsonObject, "zone");
                 data = new HeatFilm(id)
                         .setValue(value)
@@ -116,6 +117,7 @@ public abstract class BaseData {
                         .setState(state);
                 break;
             case EV_Type.EV_TIME:
+                value = JsonUtils.getJsonInt(jsonObject, "value");
                 data = new HeatUpTime(id)
                         .setValue(value)
                         .setOpcode(opcode)
@@ -123,7 +125,7 @@ public abstract class BaseData {
                 break;
             case EV_Type.EV_MISC:
                 int device = JsonUtils.getJsonInt(jsonObject, "device");
-                data = new OherControl(id)
+                data = new OtherControl(id)
                         .setDevice(device)
                         .setOpcode(opcode)
                         .setState(state);

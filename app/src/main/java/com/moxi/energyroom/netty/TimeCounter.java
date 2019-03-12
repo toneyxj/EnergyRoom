@@ -22,7 +22,7 @@ public class TimeCounter implements HandlerMessageInterface {
      * 记时回调接口
      */
     private TimeCallback listener;
-    private int timeInterval =3000;
+    private int timeInterval =20000;
 
     @Override
     public void handleMessage(Message msg) {
@@ -59,7 +59,8 @@ public class TimeCounter implements HandlerMessageInterface {
                 handler.sendEmptyMessage(10);
             }
         };
-        timer.schedule(timerTask, 0, timeInterval);
+        handler.sendEmptyMessage(10);
+        timer.schedule(timerTask, timeInterval, timeInterval);
     }
 
     /**

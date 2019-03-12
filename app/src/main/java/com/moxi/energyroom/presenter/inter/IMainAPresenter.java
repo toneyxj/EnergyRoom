@@ -21,11 +21,6 @@ public interface IMainAPresenter {
      * @param value
      */
     void curHumidity(String value);
-    /**
-     * 热量设置传输json
-     * @param json
-     */
-    void  hotSettingValue(String json);
 
     /**
      * 热量设定两侧

@@ -26,6 +26,14 @@ public interface IMainAView extends IBaseView{
     void curHumidity(String value);
 
     /**
+     * 热量设置
+     * @param orientation 方位
+     * @param isOpen 是否开启
+     * @param grade 热量等级
+     */
+    void heatSeting(int orientation,boolean isOpen,int grade);
+
+    /**
      * 加热剩余时间
      * @param time 时间值
      */
@@ -36,6 +44,11 @@ public interface IMainAView extends IBaseView{
      * @param index -1等于时间到
      */
     void settingTimeIndex(int index);
+
+    /**
+     * 关闭加热膜
+     */
+    void closeHeat();
 
     /**
      * 照明灯

@@ -55,10 +55,12 @@ public class SelectButton  extends AlphaImageView {
         if (isSelect()){
             if (select_img!=-1){
                 setImageResource(select_img);
+                setAlpha(1f);
             }
         }else {
             if (noselect_img!=-1){
                 setImageResource(noselect_img);
+                setAlpha(0.5f);
             }
         }
     }

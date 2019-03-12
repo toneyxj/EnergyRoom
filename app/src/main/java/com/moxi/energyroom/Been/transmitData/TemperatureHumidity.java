@@ -11,27 +11,27 @@ public class TemperatureHumidity extends BaseData {
     /**
      * 湿度
      */
-    private int hum = 0;
+    private float hum = 0;
     /**
      * 温度
      */
-    private int tem = 0;
+    private float tem = 0;
 
 
-    public int getHum() {
+    public float getHum() {
         return hum;
     }
 
-    public TemperatureHumidity setHum(int hum) {
+    public TemperatureHumidity setHum(float hum) {
         this.hum = hum;
         return this;
     }
 
-    public int getTem() {
+    public float getTem() {
         return tem;
     }
 
-    public TemperatureHumidity setTem(int tem) {
+    public TemperatureHumidity setTem(float tem) {
         this.tem = tem;
         return this;
     }

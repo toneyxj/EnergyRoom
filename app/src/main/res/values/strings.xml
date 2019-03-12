@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">能量房</string>
+    
+    <string name="re_connect">重连</string>
 </resources>

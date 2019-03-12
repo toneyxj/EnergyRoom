@@ -1,6 +1,8 @@
 package com.moxi.energyroom.view.inter;
 
 import android.content.Context;
+import android.os.Handler;
+
 
 public interface IBaseView {
     /**
@@ -14,5 +16,11 @@ public interface IBaseView {
      * @return
      */
     boolean isFinish();
+
+    /**
+     *
+     * @return
+     */
+    Handler getThisHandler();
 
 }

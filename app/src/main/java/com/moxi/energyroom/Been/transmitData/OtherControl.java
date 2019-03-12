@@ -6,8 +6,8 @@ import org.json.JSONObject;
 /**
  * 其余开关控制变量
  */
-public class OherControl extends BaseData{
-    public OherControl(int id) {
+public class OtherControl extends BaseData{
+    public OtherControl(int id) {
         super(id);
     }
 
@@ -20,7 +20,7 @@ public class OherControl extends BaseData{
         return device;
     }
 
-    public OherControl setDevice(int device) {
+    public OtherControl setDevice(int device) {
         this.device = device;
         return this;
     }

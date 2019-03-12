@@ -31,7 +31,7 @@ public class HeatUpTime extends BaseData{
         try {
             jsonObject.put("id",getId());
             jsonObject.put("opcode",getOpcode());
-            jsonObject.put("device",getValue());
+            jsonObject.put("value",getValue());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -58,6 +58,8 @@ public class SystemTimeModelImpl implements ISystemTimeModel {
         String []arr = {"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
         String weeks=arr[calendar.get(Calendar.DAY_OF_WEEK)-1]; //1.数组下标从0开始；2.老外的第一天是从星期日开始的
 
-        if (null!=presenter)presenter.curSystemTime(hour+":"+minute,pmOrAm,data,weeks);
+        String m=minute<10?("0"+minute):minute+"";
+        String h=hour<10?("0"+hour):hour+"";
+        if (null!=presenter)presenter.curSystemTime(h+":"+m,pmOrAm,data,weeks);
     }
 }

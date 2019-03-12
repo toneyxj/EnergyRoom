@@ -92,6 +92,7 @@ public class GradeSettingView extends AlphaRelatieLayout {
                 image.setImageBitmap(null);
             }else {
                 image.setImageResource(image_focus);
+                image.setAlpha(1f);
             }
             describe_v.setTextColor(txt_focus);
         }else {
@@ -99,6 +100,7 @@ public class GradeSettingView extends AlphaRelatieLayout {
                 image.setImageBitmap(null);
             }else {
                 image.setImageResource(image_default);
+                image.setAlpha(0.5f);
             }
             describe_v.setTextColor(txt_default);
         }

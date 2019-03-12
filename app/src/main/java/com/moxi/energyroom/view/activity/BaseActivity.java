@@ -2,6 +2,7 @@ package com.moxi.energyroom.view.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
@@ -14,6 +15,10 @@ import butterknife.ButterKnife;
 
 public  abstract class BaseActivity extends Activity implements HandlerMessageInterface{
     private BaseUtils.XJHander hander=new BaseUtils.XJHander(this);
+
+    public Handler getHander() {
+        return hander;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

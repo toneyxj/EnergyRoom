@@ -11,6 +11,6 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         ToastUtils.getInstance().initToast(this.getApplicationContext());
-        CrashReport.initCrashReport(getApplicationContext(), "a89eadc975", APPLog.isOpen);
+//        CrashReport.initCrashReport(getApplicationContext(), "a89eadc975", APPLog.isOpen);
     }
 }

@@ -2,6 +2,7 @@ package com.moxi.energyroom.view.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.moxi.energyroom.listener.HeatCallback;
 import com.moxi.energyroom.presenter.impl.MainAPresenterImpl;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.utils.APPLog;
+import com.moxi.energyroom.utils.ToastUtils;
 import com.moxi.energyroom.view.inter.IMainAView;
 import com.moxi.energyroom.view.widget.BaseView.XJTextView;
 import com.moxi.energyroom.view.widget.GradeSettingView;
@@ -125,11 +127,15 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     void clickView(View view) {
         if (view instanceof ArcAlphaButton) {
             try {
-                Object tag = view.getTag();
-                if (null != tag) {
-                    int index = (int) tag;
-                    mIMainAPresenter.settingTimeGrade(index);
-                    return;
+                if (heat_liang_ce.isSwitch()||heat_beihou.isSwitch()) {
+                    Object tag = view.getTag();
+                    if (null != tag) {
+                        int index = (int) tag;
+                        mIMainAPresenter.settingTimeGrade(index);
+                        return;
+                    }
+                }else {
+                    ToastUtils.getInstance().showToastShort("请开启热量设定！！");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -172,6 +178,11 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     }
 
     @Override
+    public Handler getThisHandler() {
+        return getHander();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mIMainAPresenter.viewIsFinish();
@@ -196,10 +207,32 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     }
 
     @Override
+    public void heatSeting(int orientation, boolean isOpen, int grade) {
+        if (orientation==0){
+            heat_liang_ce.setSwitch(isOpen);
+            heat_liang_ce.setGrade(grade);
+        }else {
+            heat_beihou.setSwitch(isOpen);
+            heat_beihou.setGrade(grade);
+        }
+        /**
+         * 都是关闭状态
+         */
+        if (!heat_beihou.isSwitch()&&!heat_liang_ce.isSwitch()){
+            settingTimeIndex(-1);
+            mIMainAPresenter.settingTimeGrade(-1);
+        }
+    }
+
+    @Override
     public void residueTime(Spannable time) {
         residue_time.setText(time);
     }
 
+    /**
+     * 加热时间控制
+     * @param index -1等于时间到
+     */
     @Override
     public void settingTimeIndex(int index) {
         setting_time_one.setSelect(false);
@@ -217,6 +250,13 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
                 setting_time_one.setSelect(true);
                 break;
         }
+    }
+
+    @Override
+    public void closeHeat() {
+        settingTimeIndex(-1);
+        heat_liang_ce.setSwitch(false);
+        heat_beihou.setSwitch(false);
     }
 
     @Override
