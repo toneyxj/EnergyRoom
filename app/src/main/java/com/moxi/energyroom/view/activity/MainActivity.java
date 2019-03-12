@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.moxi.energyroom.Been.transmitData.BaseData;
 import com.moxi.energyroom.R;
 import com.moxi.energyroom.listener.HeatCallback;
 import com.moxi.energyroom.presenter.impl.MainAPresenterImpl;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
-import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.ToastUtils;
 import com.moxi.energyroom.view.inter.IMainAView;
 import com.moxi.energyroom.view.widget.BaseView.XJTextView;
@@ -23,8 +21,6 @@ import com.moxi.energyroom.view.widget.HotAndHumidityView;
 import com.moxi.energyroom.view.widget.otherView.ArcAlphaButton;
 import com.moxi.energyroom.view.widget.otherView.HotSettingView;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -290,6 +286,16 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     }
 
     @Override
+    public void onConnectSucess() {
+
+    }
+
+    @Override
+    public void onConnectFail() {
+
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return true;
     }
@@ -314,5 +320,4 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
             mIMainAPresenter.heatSetingBeihou(open, heat_beihou.getGrade());
         }
     }
-    //热量调节监听结束
 }

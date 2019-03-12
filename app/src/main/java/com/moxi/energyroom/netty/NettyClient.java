@@ -32,14 +32,14 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class NettyClient implements NettyInnerCallback, TimeCounter.TimeCallback {
+public class NettyClient implements NettyInnerCallback {
     private static NettyClient instance = null;
     private NettyMessageCallback callback;
     private ChannelHandlerContext ctx = null;
     private BaseData sendMessageData = null;
     private boolean isFinish = false;
     private boolean isStart = false;
-    private TimeCounter timeCounter;
+
     private int failIndex = 0;
 
     /**
@@ -58,10 +58,6 @@ public class NettyClient implements NettyInnerCallback, TimeCounter.TimeCallback
         return instance;
     }
 
-    public NettyClient() {
-        timeCounter = new TimeCounter(this);
-        timeCounter.startTimer();
-    }
 
     /**
      * 从新设置callback
@@ -152,7 +148,6 @@ public class NettyClient implements NettyInnerCallback, TimeCounter.TimeCallback
     public void onDestory() {
         this.callback = null;
         isFinish = true;
-        timeCounter.stopTimer();
     }
 
     @Override
@@ -197,7 +192,6 @@ public class NettyClient implements NettyInnerCallback, TimeCounter.TimeCallback
         isStart = true;
         APPLog.e("isStart", isStart);
         this.ctx = ctx;
-        onTimerCallBack();
     }
 
     @Override
@@ -226,12 +220,4 @@ public class NettyClient implements NettyInnerCallback, TimeCounter.TimeCallback
         return isFinish || ctx == null;
     }
 
-    @Override
-    public void onTimerCallBack() {
-        APPLog.e("onTimerCallBack");
-        if (ctx == null || isFinish || !isStart) return;
-        APPLog.e("获取当前的温湿度");
-        //发送数据到服务器
-        sendMessages(new TemperatureHumidity(EV_Type.EV_SENSOR).setOpcode(0));
-    }
 }

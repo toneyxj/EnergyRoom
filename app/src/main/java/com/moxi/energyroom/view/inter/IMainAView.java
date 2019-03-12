@@ -80,4 +80,13 @@ public interface IMainAView extends IBaseView{
      * @param is 是否开启
      */
     void bottomLYYX(boolean is);
+
+    /**
+     * 与服务器连接成功
+     */
+    void onConnectSucess();
+    /**
+     * 与服务连接失败
+     */
+    void onConnectFail();
 }

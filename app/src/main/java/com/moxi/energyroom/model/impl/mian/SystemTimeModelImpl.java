@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 
+import com.moxi.energyroom.Been.transmitData.BaseData;
 import com.moxi.energyroom.model.inter.main.ISystemTimeModel;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
+import com.moxi.energyroom.presenter.inter.ISystemTimePresenter;
 import com.moxi.energyroom.view.activity.MainActivity;
 
 import java.sql.Time;
@@ -19,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SystemTimeModelImpl implements ISystemTimeModel {
-    private IMainAPresenter presenter;
+    private ISystemTimePresenter presenter;
     private Context context;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -29,7 +31,7 @@ public class SystemTimeModelImpl implements ISystemTimeModel {
 
     };
 
-    public SystemTimeModelImpl(Context context, IMainAPresenter presenter) {
+    public SystemTimeModelImpl(Context context, ISystemTimePresenter presenter) {
         this.presenter = presenter;
         this.context = context;
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_TIME_TICK);
@@ -40,6 +42,16 @@ public class SystemTimeModelImpl implements ISystemTimeModel {
     @Override
     public void onDestory() {
         context.unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void backMessage(BaseData baseData) {
+
+    }
+
+    @Override
+    public void reSendMessage() {
+
     }
 
     /**初始化时间设置

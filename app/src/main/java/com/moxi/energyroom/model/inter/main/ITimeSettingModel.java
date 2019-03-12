@@ -11,15 +11,32 @@ public interface ITimeSettingModel extends MainBaseIte{
     int getremainTime();
 
     /**
+     * 暂停时间
+     */
+    void timePause();
+
+//    /**
+//     * 开始计数
+//     */
+//    void timeStart();
+
+    /**
      * 获得设置时间-时间秒
      * @return
      */
     int getSettingTime();
 
+//    /**
+//     * 设置加热时间秒
+//     * @param totalTime 总时间数
+//     * @param curTime 剩余时间数
+//     */
+//    void settingTime(int totalTime,int curTime);
+
     /**
-     * 设置加热时间秒
-     * @param time 加热时间
+     * 设置定时时间
+     * @param grade 等级
      */
-    void settingTime(int time);
+    void settingSendTime(int grade);
 
 }

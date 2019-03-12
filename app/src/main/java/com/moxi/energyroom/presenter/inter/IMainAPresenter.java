@@ -1,26 +1,7 @@
 package com.moxi.energyroom.presenter.inter;
 
 public interface IMainAPresenter {
-    /**
-     * 设置 当前的日期与时间显示接口
-     * @param hours 当前时间
-     * @param amOrPm PM或者Am
-     * @param data 日期
-     * @param sw 周几
-     */
-    void curSystemTime(String hours,String amOrPm,String data,String sw);
 
-    /**
-     * 当前温度
-     * @param value
-     */
-    void curTemperature(String value);
-
-    /**
-     * 当前湿度
-     * @param value
-     */
-    void curHumidity(String value);
 
     /**
      * 热量设定两侧
@@ -53,15 +34,6 @@ public interface IMainAPresenter {
      * @param grade 0/1/2 ：分别代表30min与60min与90min
      */
     void settingTimeGrade(int grade);
-    /**
-     *当前剩余加热时间分钟数
-     */
-    void curRemainTime(long time);
-
-    /**
-     * 加热时间到
-     */
-    void timeOut();
 
     /**
      * 界面关闭调用通知
