@@ -216,8 +216,8 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                     @Override
                     public void onClickButton(int button) {
                         reStart = true;
-//                        NettyClient.getInstance().startNetty();
-                        ipAddressModel.reGetAddress();
+                        NettyClient.getInstance().startNetty();
+//                        ipAddressModel.reGetAddress();
                     }
                 });
             }
@@ -278,11 +278,13 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     @Override
     public void curIPAddress(String ip) {
         APPLog.e("获取到ip",ip);
+        mIMainAView.removeLodingView();
         NettyClient.getInstance().startNetty(ip);
     }
 
     @Override
     public void getIPFail(Exception e) {
+        mIMainAView.removeLodingView();
         DialogWindowUtils.getInstance().showNormalDialog(mIMainAView.getcontext(),e.getMessage(), new OnDialogClickListener() {
             @Override
             public void onClickButton(int button) {
@@ -293,5 +295,6 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
 
     @Override
     public void startGetIp() {
+        mIMainAView.onLodingView("系统初始化中...");
     }
 }

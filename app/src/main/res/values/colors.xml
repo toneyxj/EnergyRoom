@@ -28,5 +28,6 @@
     <color name="black_cut_line">#c2c2c2</color>
     <!-- 浅一点的线-->
     <color name="black_cut_line_light">#dbdbdb</color>
+    <color name="tany_black">#59000000</color>
 
 </resources>

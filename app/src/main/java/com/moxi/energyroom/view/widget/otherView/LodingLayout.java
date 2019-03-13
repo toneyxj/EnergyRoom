@@ -30,7 +30,7 @@ public class LodingLayout extends RelativeLayout implements View.OnClickListener
         hitnMsg=(XJTextView) findViewById(R.id.hitn_txt);
     }
 
-    private void setHitnMsg(String msg){
+    public void setHitnMsg(String msg){
         hitnMsg.setText(msg);
     }
 

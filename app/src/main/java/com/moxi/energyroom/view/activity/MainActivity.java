@@ -21,6 +21,7 @@ import com.moxi.energyroom.view.widget.GradeSettingView;
 import com.moxi.energyroom.view.widget.HotAndHumidityView;
 import com.moxi.energyroom.view.widget.otherView.ArcAlphaButton;
 import com.moxi.energyroom.view.widget.otherView.HotSettingView;
+import com.moxi.energyroom.view.widget.otherView.LodingLayout;
 
 
 import butterknife.BindView;
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     GradeSettingView yb;//氧吧
     @BindView(R.id.lyyx)
     GradeSettingView lyyx;//蓝牙音箱
-
+    private LodingLayout lodingLayout=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -297,14 +298,24 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     }
 
+
     @Override
     public void onLodingView(String msg) {
-//        ViewGroup viewL= (ViewGroup) getWindow().getDecorView();
+        if (lodingLayout==null) {
+            ViewGroup viewL = (ViewGroup) getWindow().getDecorView();
+            lodingLayout = new LodingLayout(getcontext());
+            ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+            lodingLayout.setLayoutParams(params);
+            lodingLayout.setBackgroundResource(R.color.tany_black);
+            viewL.addView(lodingLayout);
+        }
+        lodingLayout.setVisibility(View.VISIBLE);
+        lodingLayout.setHitnMsg(msg);
     }
 
     @Override
     public void removeLodingView() {
-
+        lodingLayout.setVisibility(View.GONE);
     }
 
     @Override
