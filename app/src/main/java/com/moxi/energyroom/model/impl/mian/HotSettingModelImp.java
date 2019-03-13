@@ -36,19 +36,20 @@ public class HotSettingModelImp implements IHotSettingModel {
     @Override
     public void doubleSideIsOpen(boolean isopen,int grade) {
         this.doubleSideIsOpen = isopen;
-        this.doubleSideHotGrade = grade+1;
+        this.doubleSideHotGrade = grade;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(0)
                 .setValue(grade + 1)
-                .setOpcode(isopen ? 1 : 1));
+                .setOpcode(isopen ? 1 : 0));
         SharePreferceUtil.getInstance(context).setCache("doubleSideIsOpen",doubleSideIsOpen);
         SharePreferceUtil.getInstance(context).setCache("doubleSideHotGrade",doubleSideHotGrade);
     }
 
     @Override
     public void backIsOpen(boolean isopen,int grade) {
+
         this.backIsOpen = isopen;
-        this.backHotGrade = grade+1;
+        this.backHotGrade = grade;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(1)
                 .setValue(grade + 1)
@@ -59,7 +60,7 @@ public class HotSettingModelImp implements IHotSettingModel {
 
     @Override
     public void setDoubleSideHotGrade(int grade) {
-        this.doubleSideHotGrade = grade+1;
+        this.doubleSideHotGrade = grade;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(0)
                 .setValue(grade + 1)
@@ -69,7 +70,7 @@ public class HotSettingModelImp implements IHotSettingModel {
 
     @Override
     public void setbackHotGrade(int grade) {
-        this.backHotGrade = grade+1;
+        this.backHotGrade = grade;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(1)
                 .setValue(grade + 1)
@@ -88,8 +89,9 @@ public class HotSettingModelImp implements IHotSettingModel {
             HeatFilm film = (HeatFilm) baseData;
             if (film.getState() == 0) {
                 ToastUtils.getInstance().showToastShort("热量设置失败！！");
+                presenter.heatSeting(film.getZone(), film.getOpcode() == 0, film.getValue()-1);
             } else {
-                presenter.heatSeting(film.getZone(), film.getOpcode() == 1, film.getValue());
+                presenter.heatSeting(film.getZone(), film.getOpcode() == 1, film.getValue()-1);
             }
         }
     }

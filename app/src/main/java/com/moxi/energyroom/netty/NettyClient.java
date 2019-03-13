@@ -1,26 +1,21 @@
 package com.moxi.energyroom.netty;
 
-import android.app.Application;
 
-import com.moxi.energyroom.Been.EV_Type;
 import com.moxi.energyroom.Been.transmitData.BaseData;
-import com.moxi.energyroom.Been.transmitData.TemperatureHumidity;
 import com.moxi.energyroom.listener.NettyInnerCallback;
 import com.moxi.energyroom.listener.NettyMessageCallback;
 import com.moxi.energyroom.utils.APPLog;
 
 import org.json.JSONException;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.RejectedExecutionException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -39,6 +34,7 @@ public class NettyClient implements NettyInnerCallback {
     private BaseData sendMessageData = null;
     private boolean isFinish = false;
     private boolean isStart = false;
+    private String ip=null;
 
     private int failIndex = 0;
 
@@ -69,27 +65,26 @@ public class NettyClient implements NettyInnerCallback {
     }
 
     public synchronized void sendMessages(BaseData data) {
-        APPLog.e(data.getOnlyValue());
+        APPLog.e("添加发送数据唯一标识="+data.getOnlyValue(),data.toJson());
         messages.put(data.getOnlyValue(), data);
         fulshData();
     }
 
     private synchronized void fulshData() {
-        APPLog.e("fulshData进入=" + messages.size());
         if (ctx == null || isFinish || !isStart) return;
         if (messages.size() == 0) return;
         Iterator iterator = messages.values().iterator();
         if (iterator.hasNext()) {
-            APPLog.e("发送数据");
             sendMessageData = (BaseData) iterator.next();
             String value = sendMessageData.toJson();
+            APPLog.e("发送数据",value);
             byte[] req = value.getBytes();
             ByteBuf firstMessage = Unpooled.buffer(req.length);
             firstMessage.writeBytes(req);
             try {
                 ctx.writeAndFlush(firstMessage);
             }catch (Exception e){
-
+                e.printStackTrace();
             }
 
         }
@@ -119,6 +114,10 @@ public class NettyClient implements NettyInnerCallback {
     // 区别在于handler是接收到了事件后交给group里面的第一个参数如bossGroup进行处理
 //    childHandler 接收到了事件后交由group的第二个参数workerGroup进行处理，自己本身不处理。
     public void startNetty() {
+        startNetty(ip);
+    }
+    public void startNetty(String ip) {
+        getInstance().ip=ip;
         isStart = false;
         new Thread(new Runnable() {
             @Override
@@ -132,7 +131,7 @@ public class NettyClient implements NettyInnerCallback {
                             .option(ChannelOption.TCP_NODELAY, true)
                             .channel(NioSocketChannel.class)
                             .handler(new MyClientInitializer(getInstance()));
-                    ChannelFuture channelFuture = bootstrap.connect("192.168.1.206", 9998).sync();
+                    ChannelFuture channelFuture = bootstrap.connect(getInstance().ip, 9998).sync();
                     channelFuture.channel().closeFuture().sync();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -187,11 +186,11 @@ public class NettyClient implements NettyInnerCallback {
         APPLog.e("onConnectSucess");
         APPLog.e("ctx", ctx == null);
         if (closeCtx(ctx)) return;
-        if (callback != null) callback.TCPConnectSucess();
         failIndex = 0;
         isStart = true;
         APPLog.e("isStart", isStart);
         this.ctx = ctx;
+        if (callback != null) callback.TCPConnectSucess();
     }
 
     @Override
@@ -219,5 +218,4 @@ public class NettyClient implements NettyInnerCallback {
         }
         return isFinish || ctx == null;
     }
-
 }

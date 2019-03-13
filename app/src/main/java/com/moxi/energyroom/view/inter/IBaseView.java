@@ -22,5 +22,15 @@ public interface IBaseView {
      * @return
      */
     Handler getThisHandler();
+    /**
+     * 加载控制view显示
+     * @param msg
+     */
+    void onLodingView(String msg);
+
+    /**
+     * 清除加载view
+     */
+    void removeLodingView();
 
 }

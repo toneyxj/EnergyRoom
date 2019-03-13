@@ -32,8 +32,10 @@ public class TimerUtils implements HandlerMessageInterface {
     public void handleMessage(Message msg) {
         if (startTime == endTime) {
             stopTimer();
-            if (listener!=null)
+            if (listener!=null) {
                 listener.TimeEnd();
+                listener.cuttentTime(startTime);
+            }
         } else {
             if (listener!=null)
                 listener.cuttentTime(startTime);

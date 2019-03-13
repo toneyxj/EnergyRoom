@@ -147,7 +147,7 @@ public class MainOtherSettingModelImp implements IMainOtherSettingModel {
             boolean is = oc.getState() == 0;
             boolean isopen = oc.getOpcode() == 1;
             String hitn = "";
-            presenter.OtherSetting(isopen, oc.getDevice());
+            presenter.OtherSetting(is?!isopen:isopen, oc.getDevice());
             if (is) {
                 switch (oc.getDevice()) {
                     case 1:

@@ -89,4 +89,5 @@ public interface IMainAView extends IBaseView{
      * 与服务连接失败
      */
     void onConnectFail();
+
 }

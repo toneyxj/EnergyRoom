@@ -1,9 +1,11 @@
 package com.moxi.energyroom.presenter.impl;
 
+import android.app.Application;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 
 import com.moxi.energyroom.Been.EV_Type;
 import com.moxi.energyroom.Been.transmitData.BaseData;
@@ -15,17 +17,20 @@ import com.moxi.energyroom.dialog.DialogWindowUtils;
 import com.moxi.energyroom.listener.NettyMessageCallback;
 import com.moxi.energyroom.listener.OnDialogClickListener;
 import com.moxi.energyroom.model.impl.mian.HotSettingModelImp;
+import com.moxi.energyroom.model.impl.mian.IPAddressModelImp;
 import com.moxi.energyroom.model.impl.mian.MainOtherSettingModelImp;
 import com.moxi.energyroom.model.impl.mian.SystemTimeModelImpl;
 import com.moxi.energyroom.model.impl.mian.TemperatureAndHumidityModelImp;
 import com.moxi.energyroom.model.impl.mian.TimeSettingModelimp;
 import com.moxi.energyroom.model.inter.main.IHotSettingModel;
+import com.moxi.energyroom.model.inter.main.IIPAddressModel;
 import com.moxi.energyroom.model.inter.main.IMainOtherSettingModel;
 import com.moxi.energyroom.model.inter.main.ISystemTimeModel;
 import com.moxi.energyroom.model.inter.main.ITemperatureAndHumidityModel;
 import com.moxi.energyroom.model.inter.main.ITimeSettingModel;
 import com.moxi.energyroom.netty.NettyClient;
 import com.moxi.energyroom.presenter.inter.IHeatSettingPresenter;
+import com.moxi.energyroom.presenter.inter.IIPAddressPresenter;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.presenter.inter.IOtherSettingPresenter;
 import com.moxi.energyroom.presenter.inter.ISystemTimePresenter;
@@ -37,17 +42,25 @@ import com.moxi.energyroom.utils.ToastUtils;
 import com.moxi.energyroom.view.inter.IBaseView;
 import com.moxi.energyroom.view.inter.IMainAView;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 import io.netty.channel.AbstractChannel;
 import io.netty.channel.ChannelException;
 
 public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
-        , ISystemTimePresenter, ITemHumPresenter, ITimeSettingPresenter, IOtherSettingPresenter, IHeatSettingPresenter {
+        , ISystemTimePresenter, ITemHumPresenter, ITimeSettingPresenter, IOtherSettingPresenter
+        , IHeatSettingPresenter ,IIPAddressPresenter {
     private IMainAView mIMainAView;
     private ISystemTimeModel systemTimeModel;
     private ITemperatureAndHumidityModel temperatureAndHumidityModel;
     private IHotSettingModel hotSettingModel;
     private ITimeSettingModel timeSettingModel;
     private IMainOtherSettingModel mainOtherSettingModel;
+    private IIPAddressModel ipAddressModel;
     /**
      * 重新连接
      */
@@ -61,9 +74,10 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         hotSettingModel = new HotSettingModelImp(mIMainAView.getcontext(),this);
         timeSettingModel = new TimeSettingModelimp(this);
         mainOtherSettingModel = new MainOtherSettingModelImp(mIMainAView.getcontext(), this);
+        ipAddressModel=new IPAddressModelImp(mIMainAView.getcontext(),this);
         //启动netty连接
         NettyClient.getInstance().reSetingCallBack(this);
-        NettyClient.getInstance().startNetty();
+        ipAddressModel.reGetAddress();
     }
 
     @Override
@@ -137,6 +151,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         hotSettingModel.onDestory();
         timeSettingModel.onDestory();
         mainOtherSettingModel.onDestory();
+        ipAddressModel.onDestory();
         //取消关联
         NettyClient.getInstance().reSetingCallBack(null);
     }
@@ -176,6 +191,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         mIMainAView.getThisHandler().post(new Runnable() {
             @Override
             public void run() {
+                APPLog.e("返回数据："+data.toJson());
                 temperatureAndHumidityModel.backMessage(data);
                 hotSettingModel.backMessage(data);
                 timeSettingModel.backMessage(data);
@@ -200,7 +216,8 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                     @Override
                     public void onClickButton(int button) {
                         reStart = true;
-                        NettyClient.getInstance().startNetty();
+//                        NettyClient.getInstance().startNetty();
+                        ipAddressModel.reGetAddress();
                     }
                 });
             }
@@ -255,5 +272,26 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     @Override
     public void heatSeting(int orientation, boolean isOpen, int grade) {
         mIMainAView.heatSeting(orientation, isOpen, grade);
+    }
+
+
+    @Override
+    public void curIPAddress(String ip) {
+        APPLog.e("获取到ip",ip);
+        NettyClient.getInstance().startNetty(ip);
+    }
+
+    @Override
+    public void getIPFail(Exception e) {
+        DialogWindowUtils.getInstance().showNormalDialog(mIMainAView.getcontext(),e.getMessage(), new OnDialogClickListener() {
+            @Override
+            public void onClickButton(int button) {
+                ipAddressModel.reGetAddress();
+            }
+        });
+    }
+
+    @Override
+    public void startGetIp() {
     }
 }

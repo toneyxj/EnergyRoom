@@ -18,6 +18,7 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
         settingTime(0,0);
     }
     private int totalTime=-1;
+    private int middleTime=-1;
     private int currentTime=-1;
     private TimerUtils timerUtils;
     @Override
@@ -41,16 +42,16 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
         this.totalTime=totalTime;
         startTime( this.currentTime);
 
-        presenter.settingGrade((totalTime/1800)-1);
+        presenter.settingGrade((totalTime/30)-1);
     }
 
     @Override
     public void settingSendTime(int grade) {
-        int setingTime = (grade + 1) * 30*60 ;
-        if (totalTime == setingTime) return;
-        totalTime=setingTime;
+        int setingTime = (grade + 1) * 30 ;
+        if (middleTime == setingTime) return;
+        middleTime=setingTime;
         NettyClient.getInstance().sendMessages(new HeatUpTime(EV_Type.EV_TIME)
-                .setValue(totalTime)
+                .setValue(middleTime)
                 .setOpcode(1));
     }
 
@@ -76,9 +77,13 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
             HeatUpTime hut = (HeatUpTime) baseData;
             if (hut.getState() == 0) {
                 ToastUtils.getInstance().showToastShort("加热时间设置失败！！");
+                presenter.settingGrade((totalTime/30)-1);
             } else {
-                int va = hut.getValue();
-                settingTime(totalTime,va);
+                this.totalTime=middleTime;
+                if (baseData.getOpcode()==1) {
+                    int va = hut.getValue();
+                    settingTime(totalTime, va);
+                }
             }
         }
     }
@@ -93,9 +98,12 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
 
     @Override
     public void cuttentTime(int time) {
-        if (time%60==0) {
-            if (null != presenter) presenter.curRemainTime(time / 60);
-        }
+//        if (time%60==0) {
+//            if (null != presenter) presenter.curRemainTime(time / 60);
+//        }
+//        if (time%60==0) {
+            if (null != presenter) presenter.curRemainTime(time );
+//        }
         currentTime=time;
     }
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.Spannable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -251,6 +252,7 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     @Override
     public void closeHeat() {
         settingTimeIndex(-1);
+
         heat_liang_ce.setSwitch(false);
         heat_beihou.setSwitch(false);
     }
@@ -296,6 +298,16 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     }
 
     @Override
+    public void onLodingView(String msg) {
+//        ViewGroup viewL= (ViewGroup) getWindow().getDecorView();
+    }
+
+    @Override
+    public void removeLodingView() {
+
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return true;
     }
@@ -320,4 +332,6 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
             mIMainAPresenter.heatSetingBeihou(open, heat_beihou.getGrade());
         }
     }
+
+
 }

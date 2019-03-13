@@ -183,6 +183,7 @@ public class WiperSwitch extends View implements OnTouchListener {
 			nowX = 0;
 		}
 		nowStatus = checked;
+		invalidate();
 	}
 
 	/**

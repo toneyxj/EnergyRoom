@@ -23,7 +23,10 @@ public class DialogWindowUtils {
     }
     private AlertDialog dialogNormal=null;
     public  void showNormalDialog(final Context context, String content, final OnDialogClickListener listener) {
-        if (null!=dialogNormal&&dialogNormal.isShowing())return;
+        if (null!=dialogNormal&&dialogNormal.isShowing()){
+            dialogNormal.cancel();
+            return;
+        }
         //创建dialog构造器
         AlertDialog.Builder normalDialog = new AlertDialog.Builder(context);
         //设置title

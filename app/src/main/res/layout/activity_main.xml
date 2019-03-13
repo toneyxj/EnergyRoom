@@ -97,7 +97,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     app:middle_txt="两侧"
-                    app:select="true"
+                    app:select="false"
                     app:select_grade="1"
                     app:top_img="@mipmap/heat_liangce" />
 
@@ -109,7 +109,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     app:middle_txt="后背"
-                    app:select="true"
+                    app:select="false"
                     app:select_grade="1"
                     app:top_img="@mipmap/heat_houbei" />
             </LinearLayout>
