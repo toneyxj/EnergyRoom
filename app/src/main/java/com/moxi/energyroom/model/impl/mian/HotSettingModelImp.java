@@ -10,6 +10,7 @@ import com.moxi.energyroom.model.inter.main.IHotSettingModel;
 import com.moxi.energyroom.netty.NettyClient;
 import com.moxi.energyroom.presenter.inter.IHeatSettingPresenter;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.SharePreferceUtil;
 import com.moxi.energyroom.utils.ToastUtils;
 
@@ -36,7 +37,7 @@ public class HotSettingModelImp implements IHotSettingModel {
         NettyClient.getInstance().sendMessages(new HeatSwitch(EV_Type.EV_FILMSWITCH)
                 .setZone(0)
                 .setValue(isopen?1:0)
-                .setOpcode(isopen ? 1 : 0));
+                .setOpcode(1));
         return true;
     }
 
@@ -54,19 +55,21 @@ public class HotSettingModelImp implements IHotSettingModel {
 
     @Override
     public void setDoubleSideHotGrade(int grade) {
-        if (grade==-1)return;
+        grade++;
+        if (grade==-1||grade==doubleSideHotGrade)return;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(0)
-                .setValue(grade + 1)
+                .setValue(grade)
                 .setOpcode(1));
     }
 
     @Override
     public void setbackHotGrade(int grade) {
-        if (grade==-1)return;
+        grade++;
+        if (grade==-1||grade==backHotGrade)return;
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(1)
-                .setValue(grade + 1)
+                .setValue(grade)
                 .setOpcode(1));
     }
 
@@ -86,17 +89,15 @@ public class HotSettingModelImp implements IHotSettingModel {
             HeatFilm film = (HeatFilm) baseData;
             if (film.getState() == 0) {
                 ToastUtils.getInstance().showToastShort("热量设置失败！！");
-//                presenter.heatSeting(film.getZone(),  film.getValue()-1);
             } else {
                 presenter.heatSeting(film.getZone(),  film.getValue()-1);
                 if (film.getZone()==0){
-                    this.doubleSideHotGrade = film.getValue()-1;
+                    this.doubleSideHotGrade = film.getValue();
                     SharePreferceUtil.getInstance(context).setCache("doubleSideHotGrade",doubleSideHotGrade);
                 }else if (film.getZone()==1){
-                    this.backHotGrade = film.getValue()-1;
+                    this.backHotGrade = film.getValue();
                     SharePreferceUtil.getInstance(context).setCache("backHotGrade",backHotGrade);
                 }
-
             }
         }else if (baseData instanceof HeatSwitch){
             HeatSwitch swi= (HeatSwitch) baseData;
@@ -112,15 +113,26 @@ public class HotSettingModelImp implements IHotSettingModel {
                         default:
                             break;
                 }
-                ToastUtils.getInstance().showToastShort(hitn+"加热膜关闭失败！！");
+                ToastUtils.getInstance().showToastShort(hitn+"加热膜操作失败！！");
                 presenter.heatSeting(swi.getZone(), swi.getValue() == 0);
             }else {
+                //当开关关闭的时候控制显示变灰
+                if (swi.getValue()==0) {
+                    presenter.heatSeting(swi.getZone(), -1);
+                    if (swi.getZone()==0){
+                        int dg=doubleSideHotGrade-1;
+                        doubleSideHotGrade=-1;
+                        setDoubleSideHotGrade(dg);
+                    }else {
+                        int dg=backHotGrade-1;
+                        backHotGrade=-1;
+                        setbackHotGrade(dg);
+                    }
+                }
                 if (swi.getZone()==0){
                     this.doubleSideIsOpen = swi.getValue()==1;
-//                    SharePreferceUtil.getInstance(context).setCache("doubleSideIsOpen",doubleSideIsOpen);
                 }else if (swi.getZone()==1){
                     this.backIsOpen = swi.getValue()==1;
-//                    SharePreferceUtil.getInstance(context).setCache("backIsOpen",backIsOpen);
                 }
                 presenter.heatSeting(swi.getZone(), swi.getValue() == 1);
                 presenter.canStartTime(isCanStartTime());
@@ -131,8 +143,8 @@ public class HotSettingModelImp implements IHotSettingModel {
 
     @Override
     public void reSendMessage() {
-        int doubleSideHotGrade= SharePreferceUtil.getInstance(context).getInt("doubleSideHotGrade",1);
-        int backHotGrade= SharePreferceUtil.getInstance(context).getInt("backHotGrade",1);
+        int doubleSideHotGrade= SharePreferceUtil.getInstance(context).getInt("doubleSideHotGrade",-1);
+        int backHotGrade= SharePreferceUtil.getInstance(context).getInt("backHotGrade",-1);
         //未开启设置
         if (doubleSideHotGrade==-1&&backHotGrade==-1)return;
         setDoubleSideHotGrade(doubleSideHotGrade);

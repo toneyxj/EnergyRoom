@@ -16,7 +16,7 @@ public abstract class XJOnClickListener implements View.OnClickListener {
     private static long time = 0;
     @Override
     public void onClick(View v) {
-        if (time != 0 && (System.currentTimeMillis() - time) < 500) {
+        if (time != 0 && (System.currentTimeMillis() - time) < 300) {
             APPLog.d("onClick","点击过频繁");
             return;
         }

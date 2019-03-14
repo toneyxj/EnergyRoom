@@ -14,6 +14,7 @@ import com.moxi.energyroom.R;
 import com.moxi.energyroom.listener.HeatCallback;
 import com.moxi.energyroom.presenter.impl.MainAPresenterImpl;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.ToastUtils;
 import com.moxi.energyroom.view.inter.IMainAView;
 import com.moxi.energyroom.view.widget.BaseView.XJTextView;
@@ -71,7 +72,8 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     GradeSettingView yb;//氧吧
     @BindView(R.id.lyyx)
     GradeSettingView lyyx;//蓝牙音箱
-    private LodingLayout lodingLayout=null;
+    private LodingLayout lodingLayout = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,12 +128,12 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
         if (view instanceof ArcAlphaButton) {
             try {
 //                if (heat_liang_ce.isSwitch()||heat_beihou.isSwitch()) {
-                    Object tag = view.getTag();
-                    if (null != tag) {
-                        int index = (int) tag;
-                        mIMainAPresenter.settingTimeGrade(index);
+                Object tag = view.getTag();
+                if (null != tag) {
+                    int index = (int) tag;
+                    mIMainAPresenter.settingTimeGrade(index);
 //                        return;
-                    }
+                }
 //                }else {
 //                    ToastUtils.getInstance().showToastShort("请开启热量设定！！");
 //                }
@@ -206,18 +208,19 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     @Override
     public void heatSeting(int orientation, int grade) {
-        if (orientation==0){
+        if (orientation == 0) {
             heat_liang_ce.setGrade(grade);
-        }else {
+        } else {
             heat_beihou.setGrade(grade);
         }
     }
 
     @Override
     public void heatSeting(int orientation, boolean isOpen) {
-        if (orientation==0){
+        APPLog.e("orientation=" + orientation, "isOpen=" + isOpen);
+        if (orientation == 0) {
             heat_liang_ce.setSwitch(isOpen);
-        }else {
+        } else {
             heat_beihou.setSwitch(isOpen);
         }
     }
@@ -241,31 +244,44 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 //    }
 
     @Override
-    public void residueTime(Spannable time) {
-        residue_time.setText(time);
+    public void residueTime(final Spannable time) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                residue_time.setText(time);
+            }
+        });
+
     }
 
     /**
      * 加热时间控制
+     *
      * @param index -1等于时间到
      */
     @Override
-    public void settingTimeIndex(int index) {
-        setting_time_one.setSelect(false);
-        setting_time_two.setSelect(false);
-        setting_time_three.setSelect(false);
-        if (index < 0) return;
-        switch (index) {
-            case 1:
-                setting_time_two.setSelect(true);
-                break;
-            case 2:
-                setting_time_three.setSelect(true);
-                break;
-            default:
-                setting_time_one.setSelect(true);
-                break;
-        }
+    public void settingTimeIndex(final int index) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setting_time_one.setSelect(false);
+                setting_time_two.setSelect(false);
+                setting_time_three.setSelect(false);
+                if (index < 0) return;
+                switch (index) {
+                    case 1:
+                        setting_time_two.setSelect(true);
+                        break;
+                    case 2:
+                        setting_time_three.setSelect(true);
+                        break;
+                    default:
+                        setting_time_one.setSelect(true);
+                        break;
+                }
+            }
+        });
+
     }
 
     @Override
@@ -319,10 +335,10 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     @Override
     public void onLodingView(String msg) {
-        if (lodingLayout==null) {
+        if (lodingLayout == null) {
             ViewGroup viewL = (ViewGroup) getWindow().getDecorView();
             lodingLayout = new LodingLayout(getcontext());
-            ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             lodingLayout.setLayoutParams(params);
             lodingLayout.setBackgroundResource(R.color.tany_black);
             viewL.addView(lodingLayout);

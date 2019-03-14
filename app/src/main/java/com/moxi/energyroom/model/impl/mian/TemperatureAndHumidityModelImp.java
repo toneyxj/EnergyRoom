@@ -73,7 +73,6 @@ public class TemperatureAndHumidityModelImp implements ITemperatureAndHumidityMo
 
     @Override
     public void onTimerCallBack() {
-        APPLog.e("onTimerCallBack");
         //发送数据到服务器
         NettyClient.getInstance().sendMessages(new TemperatureHumidity(EV_Type.EV_SENSOR).setOpcode(0));
     }

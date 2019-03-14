@@ -1,5 +1,7 @@
 package com.moxi.energyroom.model.impl.mian;
 
+import android.content.Context;
+
 import com.moxi.energyroom.Been.EV_Type;
 import com.moxi.energyroom.Been.transmitData.BaseData;
 import com.moxi.energyroom.Been.transmitData.HeatUpTime;
@@ -7,14 +9,17 @@ import com.moxi.energyroom.model.inter.main.ITimeSettingModel;
 import com.moxi.energyroom.netty.NettyClient;
 import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.presenter.inter.ITimeSettingPresenter;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.TimerUtils;
 import com.moxi.energyroom.utils.ToastUtils;
 
 public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeListener {
     private ITimeSettingPresenter presenter;
+    private Context context;
 
-    public TimeSettingModelimp(ITimeSettingPresenter presenter){
+    public TimeSettingModelimp(Context context,ITimeSettingPresenter presenter){
         this.presenter=presenter;
+        this.context=context;
         settingTime(0,0);
     }
     private int totalTime=-1;
@@ -47,8 +52,10 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
         this.currentTime=curTime;
         this.totalTime=totalTime;
         cuttentTime(this.currentTime);
-
-        presenter.settingGrade((totalTime/30)-1);
+        presenter.settingGrade(getGrade(totalTime));
+        if (null!=timerUtils&&timerUtils.isStart()){
+            timeStart();
+        }
     }
 
     @Override
@@ -58,7 +65,8 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
             settingTime(0,0);
             return;
         }
-        int setingTime = (grade + 1) * 30 ;
+        int setingTime = getTime(grade);
+
         if (middleTime == setingTime) return;
         middleTime=setingTime;
         NettyClient.getInstance().sendMessages(new HeatUpTime(EV_Type.EV_TIME)
@@ -72,7 +80,8 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
     }
 
     private void startTime(int startTime){
-        onDestory();
+        if (timerUtils!=null)
+            timerUtils.stopTimer();
         if (currentTime==0&&totalTime==0){
             if (null!=presenter)presenter.curRemainTime(0);
             return;
@@ -83,8 +92,14 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
 
     @Override
     public void onDestory() {
-        if (timerUtils!=null)
-        timerUtils.stopTimer();
+        if (timerUtils!=null) {
+            timerUtils.stopTimer();
+        }
+        cuttentTime(0);
+        presenter.settingGrade(-1);
+//        totalTime=-1;
+        middleTime=-1;
+//        currentTime=-1;
     }
 
     @Override
@@ -93,10 +108,10 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
             HeatUpTime hut = (HeatUpTime) baseData;
             if (hut.getState() == 0) {
                 ToastUtils.getInstance().showToastShort("加热时间设置失败！！");
-                presenter.settingGrade((totalTime/30)-1);
+                presenter.settingGrade(getGrade(totalTime));
             } else {
-                this.totalTime=middleTime;
                 if (baseData.getOpcode()==1) {
+                    this.totalTime=middleTime;
                     int va = hut.getValue();
                     settingTime(totalTime, va);
                 }else {
@@ -106,12 +121,26 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
         }
     }
 
+    /**
+     * 获得档位等级
+     * @param time
+     * @return
+     */
+    private int getGrade(int time){
+        return (time/30)-1;
+    }
+
+    private int getTime(int grade){
+        return (grade + 1) * 30;
+    }
+
     @Override
     public void reSendMessage() {
         if (currentTime<=0&&totalTime<=0)return;
-        NettyClient.getInstance().sendMessages(new HeatUpTime(EV_Type.EV_TIME)
-                .setValue(currentTime<=0?totalTime:currentTime)
-                .setOpcode(1));
+        settingSendTime(getGrade(totalTime));
+//        NettyClient.getInstance().sendMessages(new HeatUpTime(EV_Type.EV_TIME)
+//                .setValue(currentTime<=0?totalTime:currentTime)
+//                .setOpcode(1));
     }
 
     @Override
@@ -127,6 +156,7 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
 
     @Override
     public void TimeEnd() {
+//        middleTime=-1;
         if (null!=presenter)presenter.timeOut();
     }
 }

@@ -27,6 +27,11 @@ public class TimerUtils implements HandlerMessageInterface {
      * 记时回调接口
      */
     private TimeListener listener;
+    private boolean start=false;
+
+    public boolean isStart(){
+        return start;
+    }
 
     @Override
     public void handleMessage(Message msg) {
@@ -77,7 +82,6 @@ public class TimerUtils implements HandlerMessageInterface {
         if (timer == null) {
             timer = new Timer();
         }
-
         TimerTask timerTask = new TimerTask() {
             // 倒数10秒
             @Override
@@ -95,12 +99,14 @@ public class TimerUtils implements HandlerMessageInterface {
         if (listener!=null)
             listener.cuttentTime(startTime);
         timer.schedule(timerTask, 1000, 1000);
+        start=true;
     }
 
     /**
      * 停止计时
      */
     public void stopTimer() {
+        start=false;
         if (timer!=null) {
             timer.cancel();
             timer = null;

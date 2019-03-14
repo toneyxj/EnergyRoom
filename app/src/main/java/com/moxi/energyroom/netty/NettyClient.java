@@ -35,9 +35,9 @@ public class NettyClient implements NettyInnerCallback {
     private boolean isFinish = false;
     private boolean isStart = false;
     private String ip=null;
+    private static long curtime=0;
 
     private int failIndex = 0;
-
     /**
      * 发送的数据的数据仓库
      */
@@ -67,7 +67,12 @@ public class NettyClient implements NettyInnerCallback {
     public synchronized void sendMessages(BaseData data) {
         APPLog.e("添加发送数据唯一标识="+data.getOnlyValue(),data.toJson());
         messages.put(data.getOnlyValue(), data);
-        fulshData();
+        //如果连接时间大于两秒，重启连接
+        if (curtime>0&&(System.currentTimeMillis()-curtime)>=2000){
+            isCloseNetty();
+        }else {
+            fulshData();
+        }
     }
 
     private synchronized void fulshData() {
@@ -83,6 +88,7 @@ public class NettyClient implements NettyInnerCallback {
             firstMessage.writeBytes(req);
             try {
                 ctx.writeAndFlush(firstMessage);
+                curtime=System.currentTimeMillis();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -96,6 +102,7 @@ public class NettyClient implements NettyInnerCallback {
      * @return
      */
     private synchronized boolean isCloseNetty() {
+        curtime=0;
         if (failIndex < 8) {
             //重新连接
             try {
@@ -152,14 +159,12 @@ public class NettyClient implements NettyInnerCallback {
     @Override
     public void onBackMessage(ChannelHandlerContext ctx, String msg) {
         if (closeCtx(ctx)) return;
-        APPLog.e("ctx", ctx == null);
-//        this.ctx=ctx;
-
         if (callback != null) {
             try {
                 callback.backMessage(BaseData.buildModel(msg));
                 if (messages!=null&&sendMessageData!=null) {
                     messages.remove(sendMessageData.getOnlyValue());
+                    curtime=0;
                     fulshData();
                 }
             } catch (JSONException e) {
@@ -171,11 +176,10 @@ public class NettyClient implements NettyInnerCallback {
 
     @Override
     public void onConnectException(ChannelHandlerContext ctx, Throwable cause) {
-        APPLog.e("onConnectException");
-        APPLog.e("ctx", ctx == null);
         closeCtx(null);
         if (isFinish) return;
         //如果确定连接失败，通知显示出来
+        APPLog.e("onConnectException",cause.getMessage());
         if (isCloseNetty()) {
             if (callback != null) callback.TCPConnectFail(new Exception("控制连接已经终端"));
         }
@@ -183,12 +187,9 @@ public class NettyClient implements NettyInnerCallback {
 
     @Override
     public void onConnectSucess(ChannelHandlerContext ctx) {
-        APPLog.e("onConnectSucess");
-        APPLog.e("ctx", ctx == null);
         if (closeCtx(ctx)) return;
         failIndex = 0;
         isStart = true;
-        APPLog.e("isStart", isStart);
         this.ctx = ctx;
         if (callback != null) callback.TCPConnectSucess();
     }
@@ -202,7 +203,6 @@ public class NettyClient implements NettyInnerCallback {
         }
         //发送一个获取温湿度的消息
         APPLog.e("当亲程序处于不活跃状态");
-//        this.ctx=ctx;
     }
 
     private boolean closeCtx(ChannelHandlerContext ctx) {

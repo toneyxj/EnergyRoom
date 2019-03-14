@@ -72,7 +72,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         systemTimeModel = new SystemTimeModelImpl(aIMainAView.getcontext(), this);
         temperatureAndHumidityModel = new TemperatureAndHumidityModelImp(this);
         hotSettingModel = new HotSettingModelImp(mIMainAView.getcontext(), this);
-        timeSettingModel = new TimeSettingModelimp(this);
+        timeSettingModel = new TimeSettingModelimp(mIMainAView.getcontext(),this);
         mainOtherSettingModel = new MainOtherSettingModelImp(mIMainAView.getcontext(), this);
         ipAddressModel = new IPAddressModelImp(mIMainAView.getcontext(), this);
         //启动netty连接
@@ -99,7 +99,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     public void heatSetingLiangce(boolean isopen) {
         if (isopen) {
             String hitn = "";
-             if (timeSettingModel.isSettingTime()) {
+             if (!timeSettingModel.isSettingTime()) {
                 hitn = "请先设置加热时间！！";
             }else if (!hotSettingModel.doubleSideIsOpen(isopen)){
                  hitn = "请先设置热量等级！！";
@@ -109,8 +109,9 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                 mIMainAView.heatSeting(0,false);
                 return;
             }
+        }else {
+            hotSettingModel.doubleSideIsOpen(isopen);
         }
-        hotSettingModel.doubleSideIsOpen(isopen);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     public void heatSetingBeihou(boolean isopen) {
         if (isopen) {
             String hitn = "";
-            if (timeSettingModel.isSettingTime()) {
+            if (!timeSettingModel.isSettingTime()) {
                 hitn = "请先设置加热时间！！";
             }else if (!hotSettingModel.backIsOpen(isopen)){
                 hitn = "请先设置热量等级！！";
@@ -132,8 +133,9 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                 mIMainAView.heatSeting(1,false);
                 return;
             }
+        }else {
+            hotSettingModel.backIsOpen(isopen);
         }
-        hotSettingModel.backIsOpen(isopen);
     }
 
     @Override
@@ -168,7 +170,8 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     @Override
     public void timeOut() {
         mIMainAView.closeHeat();
-        timeSettingModel.settingSendTime(-1);
+        settingTimeGrade(-1);
+
         hotSettingModel.doubleSideIsOpen(false);
         hotSettingModel.backIsOpen(false);
     }
@@ -320,7 +323,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                 timeSettingModel.timeStart();
             }else {
                 //关闭倒计时
-                timeSettingModel.settingSendTime(-1);
+                settingTimeGrade(-1);
             }
         }
     }

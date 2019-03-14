@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.moxi.energyroom.R;
 import com.moxi.energyroom.listener.HeatCallback;
 import com.moxi.energyroom.listener.XJOnClickListener;
+import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.view.widget.WiperSwitch;
 
 public class HotSettingView extends LinearLayout {
@@ -66,6 +67,7 @@ public class HotSettingView extends LinearLayout {
         switch_view.setOnChangedListener(new WiperSwitch.OnChangedListener() {
             @Override
             public void OnChanged(WiperSwitch wiperSwitch, boolean checkState) {
+                APPLog.e("进入切换的里面");
                 if (null!=heatCallback){
                     heatCallback.openOrClose(HotSettingView.this.getTag(),checkState);
                 }
@@ -79,7 +81,7 @@ public class HotSettingView extends LinearLayout {
             topImg = array.getResourceId(R.styleable.hot_setting_top_img, -1);
             middleTxt = array.getString(R.styleable.hot_setting_middle_txt);
             isSwitch = array.getBoolean(R.styleable.hot_setting_select, false);
-            grade = array.getInteger(R.styleable.hot_setting_select_grade, 0);
+            grade = array.getInteger(R.styleable.hot_setting_select_grade, -1);
 
             array.recycle();
         }
@@ -91,7 +93,7 @@ public class HotSettingView extends LinearLayout {
     private XJOnClickListener clickListener=new XJOnClickListener() {
         @Override
         public void onclickView(View view) {
-            if (!isSwitch())return;
+//            if (!isSwitch())return;
             if (view instanceof SelectButton){
                 try {
                     int curGrade= (int) view.getTag();
@@ -128,7 +130,7 @@ public class HotSettingView extends LinearLayout {
     }
 
     public void setSwitch(boolean aSwitch) {
-        if (isSwitch==aSwitch)return;
+//        if (isSwitch==aSwitch)return;
         isSwitch = aSwitch;
         initSwich();
     }
@@ -170,7 +172,7 @@ public class HotSettingView extends LinearLayout {
         select_m.setSelect(false);
         select_h.setSelect(false);
 
-//        if (!isSwitch)return;
+        if (grade<0)return;
         switch (grade) {
             case 1:
                 select_m.setSelect(true);
@@ -178,7 +180,7 @@ public class HotSettingView extends LinearLayout {
             case 2:
                 select_h.setSelect(true);
                 break;
-            default:
+            case 0:
                 select_l.setSelect(true);
                 break;
         }
