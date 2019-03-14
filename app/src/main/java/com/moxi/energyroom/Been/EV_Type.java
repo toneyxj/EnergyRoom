@@ -20,4 +20,9 @@ public class   EV_Type {
      *其它杂设备大类
      */
     public static final int EV_MISC=0x04;
+    /**
+     * 加热膜开关控制
+     */
+    public static final int EV_FILMSWITCH=0x05;
+
 }

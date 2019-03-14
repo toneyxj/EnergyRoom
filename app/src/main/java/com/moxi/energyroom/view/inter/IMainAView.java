@@ -28,10 +28,15 @@ public interface IMainAView extends IBaseView{
     /**
      * 热量设置
      * @param orientation 方位
-     * @param isOpen 是否开启
      * @param grade 热量等级
      */
-    void heatSeting(int orientation,boolean isOpen,int grade);
+    void heatSeting(int orientation,int grade);
+    /**
+     * 热量设置
+     * @param orientation 方位
+     * @param isOpen 是否开启
+     */
+    void heatSeting(int orientation,boolean isOpen);
 
     /**
      * 加热剩余时间

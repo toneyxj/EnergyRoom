@@ -6,9 +6,8 @@ public interface IMainAPresenter {
     /**
      * 热量设定两侧
      * @param isopen 是否打开
-     * @param grade 设置等级
      */
-    void heatSetingLiangce(boolean isopen,int grade);
+    void heatSetingLiangce(boolean isopen);
 
     /**
      * 热量设定两侧
@@ -19,9 +18,8 @@ public interface IMainAPresenter {
     /**
      * 热量设定后背
      * @param isopen 是否打开
-     * @param grade 设置等级
      */
-    void heatSetingBeihou(boolean isopen,int grade);
+    void heatSetingBeihou(boolean isopen);
 
     /**
      * 热量设定后背
@@ -34,6 +32,12 @@ public interface IMainAPresenter {
      * @param grade 0/1/2 ：分别代表30min与60min与90min
      */
     void settingTimeGrade(int grade);
+
+    /**
+     * 加热开关是否可以打开
+     * @return
+     */
+    boolean isOpenSwitch();
 
     /**
      * 界面关闭调用通知

@@ -98,7 +98,7 @@
                     android:orientation="vertical"
                     app:middle_txt="两侧"
                     app:select="false"
-                    app:select_grade="1"
+                    app:select_grade="-1"
                     app:top_img="@mipmap/heat_liangce" />
 
                 <com.moxi.energyroom.view.widget.otherView.HotSettingView
@@ -110,7 +110,7 @@
                     android:orientation="vertical"
                     app:middle_txt="后背"
                     app:select="false"
-                    app:select_grade="1"
+                    app:select_grade="-1"
                     app:top_img="@mipmap/heat_houbei" />
             </LinearLayout>
         </LinearLayout>

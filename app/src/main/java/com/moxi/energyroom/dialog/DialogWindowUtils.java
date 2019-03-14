@@ -22,10 +22,16 @@ public class DialogWindowUtils {
         return instance;
     }
     private AlertDialog dialogNormal=null;
+
+    /**
+     * 显示普通的提示框
+     * @param context 上下文
+     * @param content 提示内容
+     * @param listener 点击按钮监听
+     */
     public  void showNormalDialog(final Context context, String content, final OnDialogClickListener listener) {
         if (null!=dialogNormal&&dialogNormal.isShowing()){
             dialogNormal.cancel();
-            return;
         }
         //创建dialog构造器
         AlertDialog.Builder normalDialog = new AlertDialog.Builder(context);

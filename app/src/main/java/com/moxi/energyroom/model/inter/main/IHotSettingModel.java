@@ -13,13 +13,13 @@ public interface IHotSettingModel extends MainBaseIte{
      * 两侧温度是否开启
      * @param is
      */
-    void doubleSideIsOpen(boolean is,int grade);
+    boolean doubleSideIsOpen(boolean is);
 
     /**
      * 后背是否开启
      * @param is
      */
-    void  backIsOpen(boolean is,int grade);
+    boolean  backIsOpen(boolean is);
 
     /**
      * 设置两侧温度等级
@@ -32,5 +32,7 @@ public interface IHotSettingModel extends MainBaseIte{
      * @param grade
      */
     void setbackHotGrade(int grade);
+
+    boolean isCanStartTime();
 
 }

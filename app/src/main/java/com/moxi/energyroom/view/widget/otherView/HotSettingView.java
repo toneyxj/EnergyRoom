@@ -40,7 +40,7 @@ public class HotSettingView extends LinearLayout {
     private String middleTxt = "";
     private boolean isSwitch = false;
     //依次等级0,1,2
-    private int grade = 0;
+    private int grade = -1;
 
     private HeatCallback heatCallback;
 
@@ -158,7 +158,7 @@ public class HotSettingView extends LinearLayout {
 
     private void initSwich() {
         switch_view.setChecked(isSwitch);
-        initGrade();
+//        initGrade();
     }
 
     public void setHeatCallback(HeatCallback heatCallback) {
@@ -170,7 +170,7 @@ public class HotSettingView extends LinearLayout {
         select_m.setSelect(false);
         select_h.setSelect(false);
 
-        if (!isSwitch)return;
+//        if (!isSwitch)return;
         switch (grade) {
             case 1:
                 select_m.setSelect(true);

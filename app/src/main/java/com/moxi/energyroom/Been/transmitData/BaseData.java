@@ -25,7 +25,7 @@ public abstract class BaseData {
     /**
      * 控制开关
      */
-    private int opcode=-1;
+    private int opcode = -1;
     /**
      * 数据发送到服务器开始时间
      */
@@ -81,6 +81,7 @@ public abstract class BaseData {
 
     /**
      * 获得字符串唯一标识，依此来判断请求model的唯一性
+     *
      * @return
      */
     public abstract String getOnlyValue();
@@ -96,7 +97,8 @@ public abstract class BaseData {
         BaseData data = null;
         int opcode = JsonUtils.getJsonInt(jsonObject, "opcode");
         int state = JsonUtils.getJsonInt(jsonObject, "state");
-        int value = 0;
+        int value = -1;
+        int zone = -1;
         switch (id) {
             case EV_Type.EV_SENSOR:
                 double hum = JsonUtils.getJsonDouble(jsonObject, "hum");
@@ -109,7 +111,7 @@ public abstract class BaseData {
                 break;
             case EV_Type.EV_HEATFILM:
                 value = JsonUtils.getJsonInt(jsonObject, "value");
-                int zone = JsonUtils.getJsonInt(jsonObject, "zone");
+                zone = JsonUtils.getJsonInt(jsonObject, "zone");
                 data = new HeatFilm(id)
                         .setValue(value)
                         .setZone(zone)
@@ -127,6 +129,15 @@ public abstract class BaseData {
                 int device = JsonUtils.getJsonInt(jsonObject, "device");
                 data = new OtherControl(id)
                         .setDevice(device)
+                        .setOpcode(opcode)
+                        .setState(state);
+                break;
+            case EV_Type.EV_FILMSWITCH:
+                value = JsonUtils.getJsonInt(jsonObject, "value");
+                zone = JsonUtils.getJsonInt(jsonObject, "zone");
+                data = new HeatSwitch(id)
+                        .setZone(zone)
+                        .setValue(value)
                         .setOpcode(opcode)
                         .setState(state);
                 break;

@@ -31,7 +31,13 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
         onDestory();
     }
 
-
+    /**
+     * 启动开始定时
+     */
+    @Override
+    public void timeStart() {
+        startTime( this.currentTime);
+    }
     @Override
     public int getSettingTime() {
         return totalTime;
@@ -40,19 +46,29 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
     public void settingTime(int totalTime, int curTime) {
         this.currentTime=curTime;
         this.totalTime=totalTime;
-        startTime( this.currentTime);
+        cuttentTime(this.currentTime);
 
         presenter.settingGrade((totalTime/30)-1);
     }
 
     @Override
     public void settingSendTime(int grade) {
+        //小于0代表重置时间
+        if (grade<0){
+            settingTime(0,0);
+            return;
+        }
         int setingTime = (grade + 1) * 30 ;
         if (middleTime == setingTime) return;
         middleTime=setingTime;
         NettyClient.getInstance().sendMessages(new HeatUpTime(EV_Type.EV_TIME)
                 .setValue(middleTime)
                 .setOpcode(1));
+    }
+
+    @Override
+    public boolean isSettingTime() {
+        return currentTime>0&&totalTime>0;
     }
 
     private void startTime(int startTime){
@@ -83,6 +99,8 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
                 if (baseData.getOpcode()==1) {
                     int va = hut.getValue();
                     settingTime(totalTime, va);
+                }else {
+
                 }
             }
         }

@@ -15,10 +15,10 @@ public interface ITimeSettingModel extends MainBaseIte{
      */
     void timePause();
 
-//    /**
-//     * 开始计数
-//     */
-//    void timeStart();
+    /**
+     * 开始计数
+     */
+    void timeStart();
 
     /**
      * 获得设置时间-时间秒
@@ -35,8 +35,12 @@ public interface ITimeSettingModel extends MainBaseIte{
 
     /**
      * 设置定时时间
-     * @param grade 等级
+     * @param grade 等级小于0代表重置时间
      */
     void settingSendTime(int grade);
-
+    /**
+     * 是否已经设置时间
+     * @return true，为已经设置时间
+     */
+    boolean isSettingTime();
 }

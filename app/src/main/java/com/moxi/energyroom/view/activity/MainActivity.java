@@ -125,16 +125,16 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     void clickView(View view) {
         if (view instanceof ArcAlphaButton) {
             try {
-                if (heat_liang_ce.isSwitch()||heat_beihou.isSwitch()) {
+//                if (heat_liang_ce.isSwitch()||heat_beihou.isSwitch()) {
                     Object tag = view.getTag();
                     if (null != tag) {
                         int index = (int) tag;
                         mIMainAPresenter.settingTimeGrade(index);
-                        return;
+//                        return;
                     }
-                }else {
-                    ToastUtils.getInstance().showToastShort("请开启热量设定！！");
-                }
+//                }else {
+//                    ToastUtils.getInstance().showToastShort("请开启热量设定！！");
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -205,22 +205,40 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     }
 
     @Override
-    public void heatSeting(int orientation, boolean isOpen, int grade) {
+    public void heatSeting(int orientation, int grade) {
         if (orientation==0){
-            heat_liang_ce.setSwitch(isOpen);
             heat_liang_ce.setGrade(grade);
         }else {
-            heat_beihou.setSwitch(isOpen);
             heat_beihou.setGrade(grade);
         }
-        /**
-         * 都是关闭状态
-         */
-        if (!heat_beihou.isSwitch()&&!heat_liang_ce.isSwitch()){
-            settingTimeIndex(-1);
-            mIMainAPresenter.settingTimeGrade(-1);
+    }
+
+    @Override
+    public void heatSeting(int orientation, boolean isOpen) {
+        if (orientation==0){
+            heat_liang_ce.setSwitch(isOpen);
+        }else {
+            heat_beihou.setSwitch(isOpen);
         }
     }
+
+//    @Override
+//    public void heatSeting(int orientation, boolean isOpen, int grade) {
+//        if (orientation==0){
+//            heat_liang_ce.setSwitch(isOpen);
+//            heat_liang_ce.setGrade(grade);
+//        }else {
+//            heat_beihou.setSwitch(isOpen);
+//            heat_beihou.setGrade(grade);
+//        }
+//        /**
+//         * 都是关闭状态
+//         */
+//        if (!heat_beihou.isSwitch()&&!heat_liang_ce.isSwitch()){
+//            settingTimeIndex(-1);
+//            mIMainAPresenter.settingTimeGrade(-1);
+//        }
+//    }
 
     @Override
     public void residueTime(Spannable time) {
@@ -252,10 +270,10 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
 
     @Override
     public void closeHeat() {
-        settingTimeIndex(-1);
-
-        heat_liang_ce.setSwitch(false);
-        heat_beihou.setSwitch(false);
+//        settingTimeIndex(-1);
+//
+//        heat_liang_ce.setSwitch(false);
+//        heat_beihou.setSwitch(false);
     }
 
     @Override
@@ -338,9 +356,9 @@ public class MainActivity extends BaseActivity implements IMainAView, HeatCallba
     public void openOrClose(Object tag, boolean open) {
         String t = tag.toString();
         if (t.equals("两侧")) {
-            mIMainAPresenter.heatSetingLiangce(open, heat_liang_ce.getGrade());
+            mIMainAPresenter.heatSetingLiangce(open);
         } else {
-            mIMainAPresenter.heatSetingBeihou(open, heat_beihou.getGrade());
+            mIMainAPresenter.heatSetingBeihou(open);
         }
     }
 

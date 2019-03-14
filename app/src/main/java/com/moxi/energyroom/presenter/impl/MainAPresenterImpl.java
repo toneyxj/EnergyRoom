@@ -53,7 +53,7 @@ import io.netty.channel.ChannelException;
 
 public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         , ISystemTimePresenter, ITemHumPresenter, ITimeSettingPresenter, IOtherSettingPresenter
-        , IHeatSettingPresenter ,IIPAddressPresenter {
+        , IHeatSettingPresenter, IIPAddressPresenter {
     private IMainAView mIMainAView;
     private ISystemTimeModel systemTimeModel;
     private ITemperatureAndHumidityModel temperatureAndHumidityModel;
@@ -71,10 +71,10 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         //初始化model
         systemTimeModel = new SystemTimeModelImpl(aIMainAView.getcontext(), this);
         temperatureAndHumidityModel = new TemperatureAndHumidityModelImp(this);
-        hotSettingModel = new HotSettingModelImp(mIMainAView.getcontext(),this);
+        hotSettingModel = new HotSettingModelImp(mIMainAView.getcontext(), this);
         timeSettingModel = new TimeSettingModelimp(this);
         mainOtherSettingModel = new MainOtherSettingModelImp(mIMainAView.getcontext(), this);
-        ipAddressModel=new IPAddressModelImp(mIMainAView.getcontext(),this);
+        ipAddressModel = new IPAddressModelImp(mIMainAView.getcontext(), this);
         //启动netty连接
         NettyClient.getInstance().reSetingCallBack(this);
         ipAddressModel.reGetAddress();
@@ -96,8 +96,21 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     }
 
     @Override
-    public void heatSetingLiangce(boolean isopen, int grade) {
-        hotSettingModel.doubleSideIsOpen(isopen, grade);
+    public void heatSetingLiangce(boolean isopen) {
+        if (isopen) {
+            String hitn = "";
+             if (timeSettingModel.isSettingTime()) {
+                hitn = "请先设置加热时间！！";
+            }else if (!hotSettingModel.doubleSideIsOpen(isopen)){
+                 hitn = "请先设置热量等级！！";
+             }
+            if (hitn.length() > 0) {
+                ToastUtils.getInstance().showToastShort(hitn);
+                mIMainAView.heatSeting(0,false);
+                return;
+            }
+        }
+        hotSettingModel.doubleSideIsOpen(isopen);
     }
 
     @Override
@@ -106,8 +119,21 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     }
 
     @Override
-    public void heatSetingBeihou(boolean isopen, int grade) {
-        hotSettingModel.backIsOpen(isopen, grade);
+    public void heatSetingBeihou(boolean isopen) {
+        if (isopen) {
+            String hitn = "";
+            if (timeSettingModel.isSettingTime()) {
+                hitn = "请先设置加热时间！！";
+            }else if (!hotSettingModel.backIsOpen(isopen)){
+                hitn = "请先设置热量等级！！";
+            }
+            if (hitn.length() > 0) {
+                ToastUtils.getInstance().showToastShort(hitn);
+                mIMainAView.heatSeting(1,false);
+                return;
+            }
+        }
+        hotSettingModel.backIsOpen(isopen);
     }
 
     @Override
@@ -125,6 +151,11 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     }
 
     @Override
+    public boolean isOpenSwitch() {
+        return false;
+    }
+
+    @Override
     public void curRemainTime(long time) {
         String value = time + "\nmin";
         Spannable WordtoSpan = new SpannableString(value);
@@ -137,6 +168,9 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     @Override
     public void timeOut() {
         mIMainAView.closeHeat();
+        timeSettingModel.settingSendTime(-1);
+        hotSettingModel.doubleSideIsOpen(false);
+        hotSettingModel.backIsOpen(false);
     }
 
     @Override
@@ -191,7 +225,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
         mIMainAView.getThisHandler().post(new Runnable() {
             @Override
             public void run() {
-                APPLog.e("返回数据："+data.toJson());
+                APPLog.e("返回数据：" + data.toJson());
                 temperatureAndHumidityModel.backMessage(data);
                 hotSettingModel.backMessage(data);
                 timeSettingModel.backMessage(data);
@@ -216,8 +250,8 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
                     @Override
                     public void onClickButton(int button) {
                         reStart = true;
-                        NettyClient.getInstance().startNetty();
-//                        ipAddressModel.reGetAddress();
+//                        NettyClient.getInstance().startNetty();
+                        ipAddressModel.reGetAddress();
                     }
                 });
             }
@@ -270,14 +304,31 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     }
 
     @Override
-    public void heatSeting(int orientation, boolean isOpen, int grade) {
-        mIMainAView.heatSeting(orientation, isOpen, grade);
+    public void heatSeting(int orientation, int grade) {
+        mIMainAView.heatSeting(orientation, grade);
+    }
+
+    @Override
+    public void heatSeting(int orientation, boolean isOpen) {
+        mIMainAView.heatSeting(orientation, isOpen);
+    }
+
+    @Override
+    public void canStartTime(boolean is) {
+        if (timeSettingModel.isSettingTime()) {
+            if (is){
+                timeSettingModel.timeStart();
+            }else {
+                //关闭倒计时
+                timeSettingModel.settingSendTime(-1);
+            }
+        }
     }
 
 
     @Override
     public void curIPAddress(String ip) {
-        APPLog.e("获取到ip",ip);
+        APPLog.e("获取到ip", ip);
         mIMainAView.removeLodingView();
         NettyClient.getInstance().startNetty(ip);
     }
@@ -285,7 +336,7 @@ public class MainAPresenterImpl implements IMainAPresenter, NettyMessageCallback
     @Override
     public void getIPFail(Exception e) {
         mIMainAView.removeLodingView();
-        DialogWindowUtils.getInstance().showNormalDialog(mIMainAView.getcontext(),e.getMessage(), new OnDialogClickListener() {
+        DialogWindowUtils.getInstance().showNormalDialog(mIMainAView.getcontext(), e.getMessage(), new OnDialogClickListener() {
             @Override
             public void onClickButton(int button) {
                 ipAddressModel.reGetAddress();

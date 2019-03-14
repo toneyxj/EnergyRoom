@@ -18,4 +18,6 @@ public interface ITimeSettingPresenter {
      * @param grade
      */
     void settingGrade(int grade);
+
+
 }
