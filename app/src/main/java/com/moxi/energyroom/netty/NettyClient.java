@@ -83,10 +83,10 @@ public class NettyClient implements NettyInnerCallback {
 
     private synchronized void fulshData() {
         if (ctx == null || isFinish || !isStart) return;
-        transmiting=true;
         if (messages.size() == 0) return;
         Iterator iterator = messages.values().iterator();
         if (iterator.hasNext()) {
+            transmiting=true;
             sendMessageData = (BaseData) iterator.next();
             String value = sendMessageData.toJson();
             APPLog.e("发送数据",value);
