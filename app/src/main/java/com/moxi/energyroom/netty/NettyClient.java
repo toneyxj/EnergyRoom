@@ -42,6 +42,10 @@ public class NettyClient implements NettyInnerCallback {
      * 发送的数据的数据仓库
      */
     private Map<String, BaseData> messages = new LinkedHashMap();
+    /**
+     * 数据是否在传输中
+     */
+    private boolean transmiting=false;
 
     public static NettyClient getInstance() {
         if (instance == null) {
@@ -71,12 +75,15 @@ public class NettyClient implements NettyInnerCallback {
         if (curtime>0&&(System.currentTimeMillis()-curtime)>=2000){
             isCloseNetty();
         }else {
-            fulshData();
+            if (!transmiting) {
+                fulshData();
+            }
         }
     }
 
     private synchronized void fulshData() {
         if (ctx == null || isFinish || !isStart) return;
+        transmiting=true;
         if (messages.size() == 0) return;
         Iterator iterator = messages.values().iterator();
         if (iterator.hasNext()) {
@@ -158,6 +165,7 @@ public class NettyClient implements NettyInnerCallback {
 
     @Override
     public void onBackMessage(ChannelHandlerContext ctx, String msg) {
+        transmiting=false;
         if (closeCtx(ctx)) return;
         if (callback != null) {
             try {
@@ -176,6 +184,7 @@ public class NettyClient implements NettyInnerCallback {
 
     @Override
     public void onConnectException(ChannelHandlerContext ctx, Throwable cause) {
+        transmiting=false;
         closeCtx(null);
         if (isFinish) return;
         //如果确定连接失败，通知显示出来

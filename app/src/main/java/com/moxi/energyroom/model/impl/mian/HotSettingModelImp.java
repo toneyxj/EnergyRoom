@@ -57,6 +57,7 @@ public class HotSettingModelImp implements IHotSettingModel {
     public void setDoubleSideHotGrade(int grade) {
         grade++;
         if (grade==-1||grade==doubleSideHotGrade)return;
+        APPLog.e("setDoubleSideHotGrade-进入发送");
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(0)
                 .setValue(grade)
@@ -67,6 +68,7 @@ public class HotSettingModelImp implements IHotSettingModel {
     public void setbackHotGrade(int grade) {
         grade++;
         if (grade==-1||grade==backHotGrade)return;
+        APPLog.e("setbackHotGrade-进入发送");
         NettyClient.getInstance().sendMessages(new HeatFilm(EV_Type.EV_HEATFILM)
                 .setZone(1)
                 .setValue(grade)
@@ -143,8 +145,10 @@ public class HotSettingModelImp implements IHotSettingModel {
 
     @Override
     public void reSendMessage() {
-        int doubleSideHotGrade= SharePreferceUtil.getInstance(context).getInt("doubleSideHotGrade",-1);
-        int backHotGrade= SharePreferceUtil.getInstance(context).getInt("backHotGrade",-1);
+        int doubleSideHotGrade= SharePreferceUtil.getInstance(context).getInt("doubleSideHotGrade",-1)-1;
+        int backHotGrade= SharePreferceUtil.getInstance(context).getInt("backHotGrade",-1)-1;
+        APPLog.e("doubleSideHotGrade",doubleSideHotGrade);
+        APPLog.e("backHotGrade",backHotGrade);
         //未开启设置
         if (doubleSideHotGrade==-1&&backHotGrade==-1)return;
         setDoubleSideHotGrade(doubleSideHotGrade);
