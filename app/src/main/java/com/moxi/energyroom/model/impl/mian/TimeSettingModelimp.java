@@ -7,9 +7,7 @@ import com.moxi.energyroom.Been.transmitData.BaseData;
 import com.moxi.energyroom.Been.transmitData.HeatUpTime;
 import com.moxi.energyroom.model.inter.main.ITimeSettingModel;
 import com.moxi.energyroom.netty.NettyClient;
-import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.presenter.inter.ITimeSettingPresenter;
-import com.moxi.energyroom.utils.APPLog;
 import com.moxi.energyroom.utils.TimerUtils;
 import com.moxi.energyroom.utils.ToastUtils;
 
@@ -115,7 +113,7 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
                     int va = hut.getValue();
                     settingTime(totalTime, va);
                 }else {
-
+                    TimeEnd();
                 }
             }
         }
@@ -156,7 +154,6 @@ public class TimeSettingModelimp implements ITimeSettingModel ,TimerUtils.TimeLi
 
     @Override
     public void TimeEnd() {
-//        middleTime=-1;
         if (null!=presenter)presenter.timeOut();
     }
 }

@@ -8,11 +8,6 @@ import com.moxi.energyroom.utils.APPLog;
 
 import org.json.JSONException;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -72,13 +67,14 @@ public class NettyClient implements NettyInnerCallback {
         APPLog.e("添加发送数据唯一标识="+data.getOnlyValue(),data.toJson());
         messages.put(data.getOnlyValue(), data);
         //如果连接时间大于两秒，重启连接
-        if (curtime>0&&(System.currentTimeMillis()-curtime)>=2000){
-            isCloseNetty();
-        }else {
-            if (!transmiting) {
+//        if (curtime>0&&(System.currentTimeMillis()-curtime)>=2000){
+//            APPLog.e("两秒未获取到消息尝试重连！！");
+//            isCloseNetty();
+//        }else {
+//            if (!transmiting) {
                 fulshData();
-            }
-        }
+//            }
+//        }
     }
 
     private synchronized void fulshData() {

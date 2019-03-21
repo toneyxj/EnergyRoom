@@ -1,6 +1,5 @@
 package com.moxi.energyroom.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -113,9 +112,17 @@ public class SharePreferceUtil {
      * @return String
      */
     public String getString(String key) {
-        return shareprefece.getString(key, "");
+        return getString(key,"");
     }
-
+    /**
+     * 读取缓存中的字符串 Create at 2015-9-17
+     *
+     * @param key
+     * @return String
+     */
+    public String getString(String key,String def) {
+        return shareprefece.getString(key, def);
+    }
     /**
      * 读取缓存中的布尔型缓存 Create at 2015-9-17
      *

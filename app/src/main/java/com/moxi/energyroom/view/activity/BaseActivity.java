@@ -23,6 +23,7 @@ public  abstract class BaseActivity extends Activity implements HandlerMessageIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ErrorActivity.installHandler(this);
         viewAbout();
         setContentView(getContentLayout());
         ButterKnife.bind(this);

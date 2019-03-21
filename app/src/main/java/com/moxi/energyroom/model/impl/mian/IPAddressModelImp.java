@@ -31,7 +31,7 @@ public class IPAddressModelImp implements IIPAddressModel, HandlerMessageInterfa
     public IPAddressModelImp(Context context, IIPAddressPresenter presenter) {
         this.context = context;
         this.presenter = presenter;
-        IP = SharePreferceUtil.getInstance(context).getString(IP_ADDRESS);
+        IP = SharePreferceUtil.getInstance(context).getString(IP_ADDRESS,"192.168.1.206");
     }
 
     private synchronized void start() {
