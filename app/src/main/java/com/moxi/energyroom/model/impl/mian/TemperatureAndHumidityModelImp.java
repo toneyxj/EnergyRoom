@@ -6,10 +6,7 @@ import com.moxi.energyroom.Been.transmitData.TemperatureHumidity;
 import com.moxi.energyroom.model.inter.main.ITemperatureAndHumidityModel;
 import com.moxi.energyroom.netty.NettyClient;
 import com.moxi.energyroom.netty.TimeCounter;
-import com.moxi.energyroom.presenter.impl.MainAPresenterImpl;
-import com.moxi.energyroom.presenter.inter.IMainAPresenter;
 import com.moxi.energyroom.presenter.inter.ITemHumPresenter;
-import com.moxi.energyroom.utils.APPLog;
 
 public class TemperatureAndHumidityModelImp implements ITemperatureAndHumidityModel, TimeCounter.TimeCallback {
     private TimeCounter timeCounter;
